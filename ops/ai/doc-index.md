@@ -30,6 +30,11 @@ Bu indeks, repo dokümantasyonunun SSOT giriş noktalarını listeler.
 - ERD (varsa): `docs/data/erd.md`
 - Migrations (varsa): `docs/data/migrations.md`
 
+## Code Navigation
+
+- Symbol index (generated): `docs/code/symbol-index.md`
+- Module boundaries: `docs/code/module-boundaries.md`
+
 ## Decisions (ADR)
 
 - ADR process: `docs/decisions/0001-record-architecture-decisions.md`
@@ -39,4 +44,3 @@ Bu indeks, repo dokümantasyonunun SSOT giriş noktalarını listeler.
 
 - Verify: `docs/runbooks/verify.md`
 - Tests: `docs/runbooks/tests.md`
-
