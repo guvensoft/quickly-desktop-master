@@ -5,7 +5,23 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const repoRoot = path.resolve(__dirname, '../..');
+function resolveRepoRoot() {
+  const result = spawnSync('git', ['rev-parse', '--show-toplevel'], {
+    cwd: process.cwd(),
+    encoding: 'utf8',
+    stdio: 'pipe',
+  });
+
+  if (result.status === 0) {
+    const out = String(result.stdout || '').trim();
+    if (out) return out;
+  }
+
+  return process.cwd();
+}
+
+const repoRoot = resolveRepoRoot();
+const promptsDir = path.join(repoRoot, 'ops', 'ai', 'prompts');
 const slicePath = path.join(repoRoot, 'tasks', 'ACTIVE_SLICE.md');
 
 function die(message) {
@@ -26,6 +42,58 @@ function runShell(command) {
   const code = typeof result.status === 'number' ? result.status : 1;
 
   return { command, code, stdout, stderr };
+}
+
+function parseArgs(argv) {
+  const raw = argv.slice(2);
+  let force = false;
+  const positional = [];
+
+  for (const arg of raw) {
+    if (arg === '--force') {
+      force = true;
+      continue;
+    }
+    positional.push(arg);
+  }
+
+  return { positional, force };
+}
+
+function writeSliceFromTemplate(templateName, title, force) {
+  const known = new Set(['question', 'feature', 'bugfix', 'upgrade']);
+  if (!known.has(templateName)) {
+    die(
+      `ERROR: Unknown template ${JSON.stringify(templateName)}. Expected one of: question|feature|bugfix|upgrade`,
+    );
+  }
+
+  const tasksDir = path.join(repoRoot, 'tasks');
+  const templatePath = path.join(promptsDir, `${templateName}.md`);
+
+  if (!fs.existsSync(templatePath)) {
+    die(
+      `ERROR: Template not found: ${templatePath}\n` +
+        `Expected: ops/ai/prompts/${templateName}.md (relative to repo root)`,
+    );
+  }
+
+  fs.mkdirSync(tasksDir, { recursive: true });
+
+  if (fs.existsSync(slicePath) && !force) {
+    console.warn(`WARN: ${slicePath} already exists; not overwriting. Re-run with --force to overwrite.`);
+    return;
+  }
+
+  const raw = fs.readFileSync(templatePath, 'utf8');
+  const now = new Date().toISOString();
+  const rendered = raw
+    .replace(/{{TITLE}}/g, title && String(title).trim() ? String(title).trim() : '(untitled)')
+    .replace(/{{DATE}}/g, now)
+    .replace(/{{REPO_ROOT}}/g, repoRoot);
+
+  fs.writeFileSync(slicePath, rendered, 'utf8');
+  console.log(`WROTE: ${slicePath}`);
 }
 
 function readSlice() {
@@ -120,6 +188,15 @@ function hasNpmScript(scriptName) {
 }
 
 function main() {
+  const { positional, force } = parseArgs(process.argv);
+  const templateName = positional[0];
+  const title = positional[1];
+
+  if (templateName) {
+    writeSliceFromTemplate(templateName, title, force);
+    return;
+  }
+
   const slice = readSlice();
 
   const fileBudget = parseFileBudget(slice);
