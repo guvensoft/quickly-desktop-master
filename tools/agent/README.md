@@ -28,3 +28,6 @@ Kullanım:
 ```bash
 npm run slice:question -- "Electron renderer ile main arasında IPC akışı nerede?"
 ```
+
+3) Auto dispatch
+- `npm run agent -- "Yeni feature için davranışı betimle"` komutu type’ı tahmin edip `run-slice` + verify/test/build zincirini çalıştırır ve sonuçları özetler.
