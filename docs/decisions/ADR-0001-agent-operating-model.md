@@ -1,4 +1,4 @@
-# ADR-0001: Agent Operating Model ve Repo Yapısı
+# ADR-0001: Agent Operating Model ve Repo Yapısı (Legacy)
 
 ## Status
 
@@ -22,18 +22,17 @@ Repo “agent‑ready” olacak şekilde aşağıdaki yapı ve SSOT dokümanlar�
 - `docs/api/endpoint-client-matrix.md`: Endpoint ↔ client çağrı matrisi.
 - `docs/modules/*`: Modül bazlı context pack’ler.
 - `tools/indexer/`: TS dosyalarından sembol/graf çıkaran basit indeksleyici.
-- `tasks/`: Task brief + slice şablonları ve örnek epic backlog.
+- `ops/`: Agent-ready ops altyapısı (context pack, prompt şablonları, doc verify script’leri).
 
 ## Consequences
 
 - Agent’lar, değişiklik öncesi `docs/knowledge/` ve `docs/repo-map.md` ile hedefi daraltır.
 - Üretilmiş knowledge çıktıları düzenli güncellenir (`node tools/indexer/index.js`).
-- Büyük işler slice’lara bölünür; slice kapanmadan yeni slice’a geçilmez.
+- Büyük işler küçük ve geri alınabilir commit’lere bölünür; doğrulama komutları çalıştırılır.
 
 ## How to Operate
 
 1. Konu alanını seç: `docs/modules/` veya `docs/repo-map.md`.
 2. İlgili sembolleri bul: `docs/knowledge/*.json`.
 3. Minimum dosya oku; kanıt topla.
-4. `tasks/templates/slice.md` ile slice’ı çalıştır ve kapat.
-
+4. Ops araçlarını kullan: `ops/ai/*` prompt şablonları ve `ops/scripts/verify-docs.sh`.
