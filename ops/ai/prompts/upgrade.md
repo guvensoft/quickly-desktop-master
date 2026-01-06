@@ -1,52 +1,38 @@
 # ACTIVE SLICE — UPGRADE
 
-Title: {{TITLE}}
-Date: {{DATE}}
-Repo: {{REPO_ROOT}}
+**Title:** {{TITLE}}  
+**Date:** {{DATE}}  
+**Repo:** {{REPO_ROOT}}
 
-## Target versions (TODO)
+## Target versions
+- TODO (needs confirmation):
 
-- TODO: From X → Y (list packages/tools/OS targets).
-
-## Constraints (no big bang)
-
-- Keep changes incremental and reviewable (no broad refactor/migration).
-- Do not break Electron main vs Angular renderer boundary (`main/*` vs `src/*`).
-- Avoid adding new dependencies by default; if unavoidable, document rationale + rollback.
+## Constraints
+- Big-bang upgrade yok. Fazlara böl.
+- Çalışan davranışı koru; her fazda doğrulama.
 
 ## Impact map
-
-- Renderer (Angular): TODO (files/areas)
-- Main (Electron): TODO (files/areas)
-- Build/tooling: TODO (webpack/tsconfig/scripts)
-- Tests: TODO (karma/protractor/verify)
+- Renderer (Angular): `src/...`
+- Main (Electron): `main/...`
+- Build pipeline: `webpack.config.js`, `tsconfig*.json`, `package.json`
+- Tests: `karma.conf.js`, `protractor.conf.js`, `e2e/*`
 
 ## Phased plan
-
-1) TODO: Phase 1 (smallest safe step)
-2) TODO: Phase 2
-3) TODO: Phase 3 (cleanup / follow-ups, if any)
+1) Phase 0 — ADR + plan
+2) Phase 1 — dependency alignment
+3) Phase 2 — build config
+4) Phase 3 — runtime changes
+5) Phase 4 — cleanup + docs
 
 ## ADR requirement
+- Add/update ADR under: docs/decisions/ (see docs/decisions/0001-record-architecture-decisions.md)
 
-- If scope/constraints change or a dependency/tooling change is required, add/update an ADR:
-  - `docs/decisions/0001-adr-template.md` (or the closest existing ADR for this change)
+## Verification matrix (required)
+- [ ] npm run docs:verify
+- [ ] npm run build
+- [ ] npm run test:compile
+- [ ] npm run test
+- [ ] e2e (if applicable)
 
-## Verification matrix
-
-- Docs:
-  - [ ] `npm run docs:verify`
-- Build:
-  - [ ] `npm run build`
-- TypeScript compile sanity (no Chrome):
-  - [ ] `npm run test:compile`
-- Tests (if applicable):
-  - [ ] `npm run test`
-  - [ ] `npm run test:debug`
-- Runtime smoke:
-  - [ ] TODO: electron start path + key flows
-
-## Evidence (Required)
-
-- TODO: At least 1 verifiable artifact per phase (command output, file path diff summary, log snippet).
-
+## Evidence (required)
+- Dosya yolu: `...` — Kısa alıntı/özet: “...”
