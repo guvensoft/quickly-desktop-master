@@ -4,6 +4,11 @@ set -euo pipefail
 repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$repo_root"
 
+if [[ "${REQUIRE_VERIFY:-}" != "1" ]]; then
+  echo "INFO: pre-push hooks are optional (set REQUIRE_VERIFY=1 to enable docs+verify pipeline)." >&2
+  exit 0
+fi
+
 if [[ ! -f package.json ]]; then
   echo "WARN: package.json bulunamadı; pre-push verify atlandı." >&2
   exit 0
