@@ -6,6 +6,8 @@ Bu dosya, QuicklyPOS Desktop repo’sunda agent’ların kod tabanını **hızl�
 
 ## Read Order (Required)
 
+- AGENTS.md → FAST_CONTEXT.md → docs/repo-map.md → docs/code/symbol-index.md → docs/knowledge/* → ...
+
 1) `AGENTS.md`
 2) `docs/repo-map.md`
 3) `docs/architecture/*`
