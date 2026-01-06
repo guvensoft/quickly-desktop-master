@@ -72,3 +72,32 @@ Her iş tesliminde şu sırayı takip et (kısa ve kanıta dayalı):
 3) Verification (çalıştırılan komutlar + sonuç)
 5) Doküman güncellemesi (gerekliyse)
 6) Özet + rollback
+
+## LIGHT MODE (fast, low-friction)
+
+- Amaç: Soru/keşif/planlama ve düşük riskli değişikliklerde hızlı ilerlemek; test/build/verify zorunlu değil ama öneriliyor.
+- Default read order: `AGENTS.md` → `docs/repo-map.md` → `docs/code/symbol-index.md` → `docs/knowledge/*.json` → gerekliyse hedef kod dosyaları.
+- Output format: dosya yolu + kısa kanıt + önerilen bir sonraki adım. Evidence bloğu varsa kısa notlarla desteklenmeli; sadece öneri olarak yazılan verify/test komutları çalıştırılmaz.
+- Eğer `npm run index` veya kod yapısı değiştiyse `docs/knowledge/*.json` güncellenmeli; `npm run index` önerilir.
+- Sıkı mod (STRICT MODE) gerektiğinde `REQUIRE_VERIFY=1` ile `npm run verify`, `npm run test:compile`, `npm run build` gibi kontrolleri isteğe bağlı çalıştır.
+- Sembol aramaları için `docs/knowledge/symbols.json`, `symbols.by-source.json` ve `sources.json` içindeki `sourceId`/source tanımlarını kullanarak renderer (`app`) vs main (`electron`) filtrelemesi yapılmalı.
+
+### Örnek: QUESTION — “PouchDB sync nerede?”
+- Read order: AGENTS → repo-map → symbol-index → docs/knowledge/symbols.json → `src/app/services`.
+- Evidence önerisi: `src/app/services/sync.service.ts` içindeki `syncToServer` metodu.
+- Next step: “Assumption: PouchDB sync kodu main/renderer boundary’sinde, `tasks/ACTIVE_SLICE.md`’de plan hazırlanır.”
+
+### Örnek: FEATURE — “Küçük UI değişikliği”
+- Read order: AGENTS → repo-map → module-boundaries → relevant component.
+- Evidence: ilgili component template ve renderer/main boundary (Angular component + Electron IPC).
+- Next step: “Test: lokal serve + npm run index if component signature changed.”
+
+### Örnek: BUGFIX — “Uygulama crash oluyor”
+- Read order: AGENTS → repo-map → docs/knowledge/symbols.json → `src/app/services/`. 
+- Evidence: `main/electron/index.ts` logundan crash stack trace + `src/app/providers/electron.service.ts` method referansı.
+- Next step: “Retry after adding focused unit/QA, optionally `npm run agent:verify` for strict.”
+
+### Örnek: UPGRADE — “Angular/Electron’ın küçük sürüm bump’ı”
+- Read order: AGENTS → repo-map → docs/knowledge/symbols.json → `package.json`.
+- Evidence: dependency list + relevant `src` entry points (renderer/main).
+- Next step: “STRICT MODE: `REQUIRE_VERIFY=1` ile docs/index/test/build çalıştır.”

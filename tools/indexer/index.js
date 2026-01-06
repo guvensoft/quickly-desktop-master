@@ -3,6 +3,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const ts = require('typescript');
 
 const repoRoot = path.resolve(__dirname, '../..');
 const srcRoots = [path.join(repoRoot, 'src'), path.join(repoRoot, 'main')];
@@ -13,8 +14,21 @@ const outFiles = {
   services: path.join(outDir, 'services.json'),
   modules: path.join(outDir, 'modules.json'),
   importsGraph: path.join(outDir, 'imports-graph.json'),
+  symbols: path.join(outDir, 'symbols.json'),
+  symbolsBySource: path.join(outDir, 'symbols.by-source.json'),
+  sources: path.join(outDir, 'sources.json'),
 };
 const repoMapGeneratedPath = path.join(repoRoot, 'docs', 'repo-map.generated.md');
+const packageJson = require(path.join(repoRoot, 'package.json'));
+const repoName = packageJson.name || path.basename(repoRoot);
+
+const tsconfigSources = [
+  { id: 'app', tsconfig: 'src/tsconfig.app.json', kind: 'angular' },
+  { id: 'electron', tsconfig: 'tsconfig.electron.json', kind: 'electron' },
+  { id: 'spec', tsconfig: 'src/tsconfig.spec.json', kind: 'tests' },
+  { id: 'e2e', tsconfig: 'e2e/tsconfig.e2e.json', kind: 'tests' },
+  { id: 'root', tsconfig: 'tsconfig.json', kind: 'root' },
+];
 
 const IGNORE_DIRS = new Set([
   'node_modules',
@@ -60,14 +74,278 @@ function readFileSafe(filePath) {
   }
 }
 
+function parseJsonSafe(filePath) {
+  try {
+    const text = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
+function readTsconfigHints(relPath) {
+  const cfgPath = path.join(repoRoot, relPath);
+  const json = parseJsonSafe(cfgPath);
+  if (!json) return { includeHints: [], excludeHints: [] };
+  const includeHints = Array.isArray(json.include) ? json.include.slice() : [];
+  if (Array.isArray(json.files)) includeHints.push(...json.files);
+  const excludeHints = Array.isArray(json.exclude) ? json.exclude.slice() : [];
+  return {
+    includeHints: includeHints.filter((hint) => typeof hint === 'string'),
+    excludeHints: excludeHints.filter((hint) => typeof hint === 'string'),
+  };
+}
+
+function buildSourcesMetadata() {
+  return tsconfigSources
+    .map((cfg) => {
+      const hints = readTsconfigHints(cfg.tsconfig);
+      return {
+        id: cfg.id,
+        tsconfig: cfg.tsconfig,
+        kind: cfg.kind,
+        includeHints: hints.includeHints.sort(),
+        excludeHints: hints.excludeHints.sort(),
+      };
+    })
+    .sort((a, b) => a.id.localeCompare(b.id));
+}
+
+function determineSourceId(relPath) {
+  const normalized = relPath || '';
+  if (normalized === 'main.ts' || normalized.startsWith('main/')) return 'electron';
+  if (normalized.startsWith('e2e/')) return 'e2e';
+  if (normalized.startsWith('src/')) {
+    if (normalized === 'src/test.ts' || normalized.includes('.spec.')) return 'spec';
+    return 'app';
+  }
+  if (!normalized || normalized.startsWith('docs/') || normalized.startsWith('ops/') || normalized.startsWith('tasks/') || normalized.startsWith('tools/')) {
+    return 'root';
+  }
+  return 'unknown';
+}
 function normalizeRel(filePath) {
   return path.relative(repoRoot, filePath).split(path.sep).join('/');
+}
+
+function hasModifier(node, kind) {
+  return !!node.modifiers && node.modifiers.some((mod) => mod.kind === kind);
+}
+
+function isNodeExported(node) {
+  return hasModifier(node, ts.SyntaxKind.ExportKeyword);
+}
+
+function getDecoratorNames(node) {
+  if (!node.decorators) return [];
+  const names = [];
+  for (const decorator of node.decorators) {
+    const expr = decorator.expression;
+    if (!expr) continue;
+    if (ts.isCallExpression(expr) && expr.expression) names.push(expr.expression.getText());
+    else names.push(expr.getText());
+  }
+  return names;
+}
+
+function getHeritageNames(node, tokenKind) {
+  if (!node.heritageClauses) return [];
+  const clause = node.heritageClauses.find((h) => h.token === tokenKind);
+  if (!clause) return [];
+  return clause.types.map((t) => t.expression.getText());
+}
+
+function getAccessModifier(node) {
+  if (hasModifier(node, ts.SyntaxKind.PrivateKeyword)) return 'private';
+  if (hasModifier(node, ts.SyntaxKind.ProtectedKeyword)) return 'protected';
+  if (hasModifier(node, ts.SyntaxKind.PublicKeyword)) return 'public';
+  return 'public';
+}
+
+function getParamsInfo(parameters, sourceFile) {
+  return parameters.map((param) => ({
+    name: param.name ? param.name.getText(sourceFile) : 'param',
+    type: param.type ? param.type.getText(sourceFile) : 'any',
+    optional: !!param.questionToken,
+  }));
+}
+
+function buildMemberInfo(member, sourceFile) {
+  const kind = ts.isConstructorDeclaration(member)
+    ? 'constructor'
+    : ts.isMethodDeclaration(member) || ts.isMethodSignature(member)
+    ? 'method'
+    : 'property';
+  const name =
+    ts.isConstructorDeclaration(member) || !member.name
+      ? 'constructor'
+      : member.name.getText(sourceFile);
+  const info = {
+    kind,
+    name,
+    access: getAccessModifier(member),
+    static: hasModifier(member, ts.SyntaxKind.StaticKeyword),
+    async: hasModifier(member, ts.SyntaxKind.AsyncKeyword),
+  };
+  if (kind !== 'property') {
+    info.params = getParamsInfo(member.parameters || [], sourceFile);
+  } else {
+    info.params = [];
+  }
+  if (member.type) info.returnType = member.type.getText(sourceFile);
+  return info;
+}
+
+function buildClassExport(node, sourceFile) {
+  const name = node.name ? node.name.getText(sourceFile) : 'default';
+  const decorators = getDecoratorNames(node);
+  const extendsClause = getHeritageNames(node, ts.SyntaxKind.ExtendsKeyword);
+  const implementsClause = getHeritageNames(node, ts.SyntaxKind.ImplementsKeyword);
+  const members = node.members
+    .map((member) => buildMemberInfo(member, sourceFile))
+    .filter(Boolean)
+    .sort((a, b) => `${a.kind}:${a.name}`.localeCompare(`${b.kind}:${b.name}`));
+  return {
+    kind: 'class',
+    name,
+    decorators,
+    extends: extendsClause[0],
+    implements: implementsClause,
+    members,
+  };
+}
+
+function buildFunctionExport(node, sourceFile) {
+  const name = node.name ? node.name.getText(sourceFile) : 'default';
+  return {
+    kind: 'function',
+    name,
+    params: getParamsInfo(node.parameters || [], sourceFile),
+    returnType: node.type ? node.type.getText(sourceFile) : undefined,
+  };
+}
+
+function buildInterfaceExport(node, sourceFile) {
+  const members = node.members
+    .map((member) => buildMemberInfo(member, sourceFile))
+    .filter(Boolean)
+    .sort((a, b) => `${a.kind}:${a.name}`.localeCompare(`${b.kind}:${b.name}`));
+  return {
+    kind: 'interface',
+    name: node.name ? node.name.getText(sourceFile) : 'default',
+    members,
+  };
+}
+
+function buildEnumExport(node, sourceFile) {
+  return {
+    kind: 'enum',
+    name: node.name ? node.name.getText(sourceFile) : 'default',
+    members: node.members.map((member) => ({
+      name: member.name.getText(sourceFile),
+    })),
+  };
+}
+
+function buildTypeAliasExport(node, sourceFile) {
+  return {
+    kind: 'type',
+    name: node.name ? node.name.getText(sourceFile) : 'default',
+    type: node.type ? node.type.getText(sourceFile) : undefined,
+  };
+}
+
+function buildVariableExports(node, sourceFile) {
+  const kind =
+    node.declarationList.flags & ts.NodeFlags.Const
+      ? 'const'
+      : node.declarationList.flags & ts.NodeFlags.Let
+      ? 'let'
+      : 'var';
+  return node.declarationList.declarations.map((decl) => ({
+    kind,
+    name: decl.name.getText(sourceFile),
+    type: decl.type ? decl.type.getText(sourceFile) : undefined,
+  }));
+}
+
+function collectSymbols(tsFiles) {
+  const fileMap = new Map();
+  for (const absPath of tsFiles) {
+    const relPath = normalizeRel(absPath);
+    const text = readFileSafe(absPath);
+    const sourceFile = ts.createSourceFile(relPath, text, ts.ScriptTarget.Latest, true);
+    const exports = [];
+
+    function visit(node) {
+      if (ts.isClassDeclaration(node) && isNodeExported(node)) {
+        exports.push(buildClassExport(node, sourceFile));
+      } else if (ts.isFunctionDeclaration(node) && isNodeExported(node)) {
+        exports.push(buildFunctionExport(node, sourceFile));
+      } else if (ts.isInterfaceDeclaration(node) && isNodeExported(node)) {
+        exports.push(buildInterfaceExport(node, sourceFile));
+      } else if (ts.isEnumDeclaration(node) && isNodeExported(node)) {
+        exports.push(buildEnumExport(node, sourceFile));
+      } else if (ts.isTypeAliasDeclaration(node) && isNodeExported(node)) {
+        exports.push(buildTypeAliasExport(node, sourceFile));
+      } else if (ts.isVariableStatement(node) && isNodeExported(node)) {
+        exports.push(...buildVariableExports(node, sourceFile));
+      }
+      ts.forEachChild(node, visit);
+    }
+
+    ts.forEachChild(sourceFile, visit);
+
+    const sourceId = determineSourceId(relPath);
+    const exportsWithSource =
+      exports.length > 0
+        ? exports
+            .map((entry) => Object.assign({}, entry, { sourceId }))
+            .sort((a, b) => `${a.kind}:${a.name}`.localeCompare(`${b.kind}:${b.name}`))
+        : [];
+
+    if (exportsWithSource.length) fileMap.set(relPath, exportsWithSource);
+  }
+
+  return {
+    repo: repoName,
+    files: Array.from(fileMap.entries())
+      .map(([file, entries]) => ({
+        file,
+        sourceId: determineSourceId(file),
+        exports: entries.sort((a, b) => `${a.kind}:${a.name}`.localeCompare(`${b.kind}:${b.name}`)),
+      }))
+      .sort((a, b) => a.file.localeCompare(b.file)),
+  };
 }
 
 function uniqueSorted(items, keyFn) {
   const map = new Map();
   for (const item of items) map.set(keyFn(item), item);
   return Array.from(map.values()).sort((a, b) => keyFn(a).localeCompare(keyFn(b)));
+}
+
+function buildSymbolsBySource(symbolIndex) {
+  const summary = {};
+  for (const fileEntry of symbolIndex.files) {
+    const sid = fileEntry.sourceId || 'unknown';
+    if (!summary[sid]) {
+      summary[sid] = {
+        files: [],
+        exportsCount: 0,
+      };
+    }
+    summary[sid].files.push(fileEntry.file);
+    summary[sid].exportsCount += fileEntry.exports.length;
+  }
+  const sorted = {};
+  for (const sid of Object.keys(summary).sort()) {
+    sorted[sid] = {
+      files: summary[sid].files.sort(),
+      exportsCount: summary[sid].exportsCount,
+    };
+  }
+  return sorted;
 }
 
 function maxMtimeMs(files) {
@@ -201,6 +479,11 @@ function buildRepoMapMarkdown(knowledge, outputs) {
   lines.push(`- \`docs/knowledge/services.json\` (items: ${outputs.services.items.length})`);
   lines.push(`- \`docs/knowledge/modules.json\` (items: ${outputs.modules.items.length})`);
   lines.push(`- \`docs/knowledge/imports-graph.json\` (edges: ${outputs.importsGraph.edges.length})`);
+  lines.push(`- \`docs/knowledge/symbols.json\` (files: ${outputs.symbols.files.length})`);
+  lines.push(
+    `- \`docs/knowledge/symbols.by-source.json\` (entries: ${Object.keys(outputs.symbolsBySource).length})`
+  );
+  lines.push(`- \`docs/knowledge/sources.json\` (sources: ${outputs.sources.sources.length})`);
   lines.push('');
 
   // Lightweight imports graph summary: top importers
@@ -316,11 +599,22 @@ function main() {
     edges: uniqueSorted(importEdges, (e) => `${e.from}=>${e.import}`),
   };
 
+  const symbolIndex = collectSymbols(tsFiles);
+  const symbolsOut = symbolIndex;
+  const sourcesOut = {
+    repo: repoName,
+    sources: buildSourcesMetadata(),
+  };
+  const symbolsBySourceOut = buildSymbolsBySource(symbolIndex);
+
   const outputs = {
     components: componentsOut,
     services: servicesOut,
     modules: modulesOut,
     importsGraph: importsGraphOut,
+    symbols: symbolsOut,
+    symbolsBySource: symbolsBySourceOut,
+    sources: sourcesOut,
   };
 
   const jsonByPath = new Map([
@@ -328,6 +622,9 @@ function main() {
     [outFiles.services, JSON.stringify(servicesOut, null, 2) + '\n'],
     [outFiles.modules, JSON.stringify(modulesOut, null, 2) + '\n'],
     [outFiles.importsGraph, JSON.stringify(importsGraphOut, null, 2) + '\n'],
+    [outFiles.symbols, JSON.stringify(symbolsOut, null, 2) + '\n'],
+    [outFiles.symbolsBySource, JSON.stringify(symbolsBySourceOut, null, 2) + '\n'],
+    [outFiles.sources, JSON.stringify(sourcesOut, null, 2) + '\n'],
   ]);
 
   if (isCheck) {
@@ -355,6 +652,9 @@ function main() {
   console.log(`- ${path.relative(repoRoot, outFiles.services)}`);
   console.log(`- ${path.relative(repoRoot, outFiles.modules)}`);
   console.log(`- ${path.relative(repoRoot, outFiles.importsGraph)}`);
+  console.log(`- ${path.relative(repoRoot, outFiles.symbols)}`);
+  console.log(`- ${path.relative(repoRoot, outFiles.symbolsBySource)}`);
+  console.log(`- ${path.relative(repoRoot, outFiles.sources)}`);
   console.log(`- ${path.relative(repoRoot, repoMapGeneratedPath)}`);
 }
 

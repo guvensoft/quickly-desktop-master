@@ -14,6 +14,7 @@ Bu dosya `node tools/indexer/index.js` tarafından üretilir. Elle düzenlemeyin
 - `drivers/`
 - `e2e/`
 - `main/`
+- `ops/`
 - `src/`
 - `tasks/`
 - `tools/`
@@ -33,6 +34,9 @@ Bu dosya `node tools/indexer/index.js` tarafından üretilir. Elle düzenlemeyin
 - `docs/knowledge/services.json` (items: 19)
 - `docs/knowledge/modules.json` (items: 2)
 - `docs/knowledge/imports-graph.json` (edges: 408)
+- `docs/knowledge/symbols.json` (files: 74)
+- `docs/knowledge/symbols.by-source.json` (entries: 1)
+- `docs/knowledge/sources.json` (sources: 5)
 
 ## Imports Graph (Top Importers)
 

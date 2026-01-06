@@ -22,6 +22,7 @@
   "scripts": {
     "ng": "ng",
     "index": "node tools/indexer/index.js",
+    "index:check": "node tools/indexer/index.js --check",
     "lint": "ng lint",
     "start": "npm-run-all --parallel webpack:watch electron:serve",
     "webpack:watch": "webpack --watch",

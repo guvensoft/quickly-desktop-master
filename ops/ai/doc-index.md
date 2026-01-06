@@ -34,6 +34,10 @@ Bu indeks, repo dokümantasyonunun SSOT giriş noktalarını listeler.
 
 - Symbol index (generated): `docs/code/symbol-index.md`
 - Module boundaries: `docs/code/module-boundaries.md`
+- TypeScript symbol metadata: `docs/knowledge/symbols.json`
+- Source-aware symbols summary: `docs/knowledge/symbols.by-source.json`
+- Source hints (tsconfig): `docs/knowledge/sources.json`
+- Method/service metadata (generated): `docs/knowledge/symbols.json`
 
 ## Decisions (ADR)
 

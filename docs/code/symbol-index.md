@@ -6,6 +6,8 @@ Bu dosya `ops/scripts/gen-symbol-index.sh` tarafından üretilir.
 
 - `ops/scripts/gen-symbol-index.sh`
 
+> Yeni: `docs/knowledge/symbols.json` AST tabanlı export/signature bilgisi sağlar; `npm run index` komutuyla yeniden üretilir.
+
 <!-- ops:gen-symbol-index:start -->
 
 ## Exports (TS/JS)

@@ -1,0 +1,47 @@
+%% Sequence: Developer → run-slice → edit → hooks
+sequenceDiagram
+    participant Dev as Developer/Agent
+    participant RunSlice as tools/agent/run-slice.js
+    participant SliceFile as tasks/ACTIVE_SLICE.md
+    participant PreCommit as .githooks/pre-commit
+    participant PrePush as .githooks/pre-push
+    Dev->>RunSlice: node tools/agent/run-slice.js <type> "<task text>"
+    RunSlice-->>SliceFile: Creates/updates task template + Evidence section
+    Dev->>SliceFile: Plan/Patch/Verify/Evidence edits
+    SliceFile->>PreCommit: git commit
+    PreCommit->>.ops/verify:silently: ops/scripts/verify-docs.sh
+    PreCommit->>Indexer: node tools/indexer/index.js --check
+    PreCommit->>PrePush: git push (if commit succeeds)
+    PrePush->>.ops/verify:silently: ops/scripts/verify-docs.sh
+    PrePush->>Package: npm run verify / lint / test / typecheck / build
+
+%% Flowchart: pre-commit decision tree
+flowchart TD
+    StartCommit([git commit])
+    CheckSlice{tasks/ACTIVE_SLICE.md var mı?}
+    StartCommit --> CheckSlice
+    CheckSlice -- Hayır --> WarnSlice[WARN: slice guard atlandı]
+    WarnSlice --> DocsVerify[ops/scripts/verify-docs.sh]
+    DocsVerify --> IndexCheck[node tools/indexer/index.js --check]
+    IndexCheck --> EndCommit[commit allowed]
+    CheckSlice -- Evet --> HasEvidence{"Evidence dolu mu?"}
+    HasEvidence -- Hayır --> FailEvidence[ERROR: Evidence bölümü boş]
+    FailEvidence --> EndFail[commit kesildi]
+    HasEvidence -- Evet --> DocsVerify
+
+%% Flowchart: pre-push decision tree
+flowchart TD
+    StartPush([git push])
+    CheckPackage{package.json var mı?}
+    StartPush --> CheckPackage
+    CheckPackage -- Hayır --> WarnNoPackage[WARN: package.json yok; atlandı]
+    WarnNoPackage --> EndPush
+    CheckPackage -- Evet --> DocsVerify2[ops/scripts/verify-docs.sh]
+    DocsVerify2 --> HasVerify{npm run verify scripti var mı?}
+    HasVerify -- Evet --> RunVerify[npm run verify]
+    RunVerify --> EndPush
+    HasVerify -- Hayır --> RunLint[npm run lint?]
+    RunLint --> RunTest[npm run test?]
+    RunTest --> RunTypecheck[npm run typecheck?]
+    RunTypecheck --> RunBuild[npm run build?]
+    RunBuild --> EndPush

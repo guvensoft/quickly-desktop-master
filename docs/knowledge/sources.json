@@ -1,0 +1,59 @@
+{
+  "repo": "quickly-desktop",
+  "sources": [
+    {
+      "id": "app",
+      "tsconfig": "src/tsconfig.app.json",
+      "kind": "angular",
+      "includeHints": [
+        "app/app.module.ts",
+        "main.ts",
+        "polyfills.ts",
+        "typings.d.ts"
+      ],
+      "excludeHints": [
+        "**/*.spec.ts",
+        "test.ts"
+      ]
+    },
+    {
+      "id": "e2e",
+      "tsconfig": "e2e/tsconfig.e2e.json",
+      "kind": "tests",
+      "includeHints": [],
+      "excludeHints": []
+    },
+    {
+      "id": "electron",
+      "tsconfig": "tsconfig.electron.json",
+      "kind": "electron",
+      "includeHints": [
+        "main.ts",
+        "main/**/*.ts"
+      ],
+      "excludeHints": [
+        "node_modules"
+      ]
+    },
+    {
+      "id": "root",
+      "tsconfig": "tsconfig.json",
+      "kind": "root",
+      "includeHints": [],
+      "excludeHints": [
+        "node_modules"
+      ]
+    },
+    {
+      "id": "spec",
+      "tsconfig": "src/tsconfig.spec.json",
+      "kind": "tests",
+      "includeHints": [
+        "**/*.d.ts",
+        "**/*.spec.ts",
+        "test.ts"
+      ],
+      "excludeHints": []
+    }
+  ]
+}
