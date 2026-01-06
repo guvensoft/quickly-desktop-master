@@ -4,8 +4,8 @@ set -euo pipefail
 repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$repo_root"
 
-if [[ "${REQUIRE_VERIFY:-}" != "1" ]]; then
-  echo "INFO: pre-push hooks are optional (set REQUIRE_VERIFY=1 to enable docs+verify pipeline)." >&2
+if [[ "${REQUIRE_VERIFY:-}" != "1" && "${REQUIRE_STRICT:-}" != "1" ]]; then
+  echo "INFO: pre-push hooks are optional (set REQUIRE_VERIFY=1 or REQUIRE_STRICT=1 to enable docs+verify pipeline)." >&2
   exit 0
 fi
 

@@ -45,7 +45,7 @@ else
   echo "WARN: tasks/ACTIVE_SLICE.md yok; slice guard atlandı. (REQUIRE_ACTIVE_SLICE=1 ile zorlanabilir)" >&2
 fi
 
-if [[ "${REQUIRE_VERIFY:-}" == "1" ]]; then
+if [[ "${REQUIRE_VERIFY:-}" == "1" || "${REQUIRE_STRICT:-}" == "1" ]]; then
   if [[ -x "ops/scripts/verify-docs.sh" ]]; then
     echo "Running: ops/scripts/verify-docs.sh" >&2
     ops/scripts/verify-docs.sh
@@ -59,7 +59,7 @@ if [[ "${REQUIRE_VERIFY:-}" == "1" ]]; then
     fi
   fi
 else
-  echo "INFO: VERIFY opt-in (REQUIRE_VERIFY=1) ile docs/index kontrolü yapabilirsiniz." >&2
+  echo "INFO: Heavy verify/index steps are opt-in (set REQUIRE_VERIFY=1 or REQUIRE_STRICT=1)." >&2
 fi
 
 exit 0
