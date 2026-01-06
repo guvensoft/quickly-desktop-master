@@ -23,6 +23,7 @@ Bu repo’da ayrıca indexer tarafından üretilen otomatik harita vardır:
 - `webpack.config.js`: Bundle/build pipeline (Angular CLI yerine webpack).
 - `electron-builder.json`: Paketleme (Electron Builder) ayarları.
 - `tools/`: Repo ops araçları (verify/indexer vb.).
+- `ops/`: Agent-understanding ops araçları (repo-map/symbol-index generator, doc verify, prompt templates).
 
 ## Runtime Akışı (Electron + Angular)
 
@@ -82,6 +83,28 @@ Bu repo’da ayrıca indexer tarafından üretilen otomatik harita vardır:
 - Test/Build toolchain: Karma `@angular/cli` plugin zinciri kullanır; webpack tarafında `@ngtools/webpack` tek fiziksel kopya hedeflenmelidir (bkz. `webpack.config.js`).
 - Üretilmiş artefact’lara dokunma: `dist/`, `node_modules/`, `app-builds/` (varsa), `docs/knowledge/*.json`.
 
+## Where to implement X?
+
+- Yeni UI ekranı:
+  - Component: `src/app/components/<area>/...`
+  - Route: `src/app/app-routing.module.ts`
+  - Permissions/guards: `src/app/guards/auth.guard.service.ts` + `src/app/services/auth.service.ts`
+- Yeni “domain kuralı”:
+  - Servisler: `src/app/services/*` (özellikle `MainService`, `SettingsService`)
+  - Model/mocks: `src/app/mocks/*`
+  - TODO (needs confirmation): Ayrı bir “domain layer” yok; küçük ve lokal değişikliklerle ilerle.
+- Yeni remote endpoint/contract:
+  - Caller map: `docs/api/endpoint-client-matrix.md`
+  - HTTP wrapper: `src/app/services/http.service.ts`
+  - OpenAPI stub: `docs/api/openapi.yaml` (belirsiz alanları TODO ile işaretle)
+- Yeni local persistence değişikliği:
+  - PouchDB catalog: `src/app/services/main.service.ts`
+  - Conflict: `src/app/services/conflict.service.ts`
+  - Doküman: `docs/data/persistence.md` + `docs/data/migrations.md`
+- Yeni device integration (printer/scaler/caller):
+  - Electron main: `main/*`
+  - Renderer bridge: `src/app/providers/electron.service.ts`
+
 
 ## Sık Kullanılan Altyapı Bileşenleri (Kısa Rehber)
 
@@ -98,6 +121,8 @@ Bu repo’da ayrıca indexer tarafından üretilen otomatik harita vardır:
 - Device integration (Electron):
   - `src/app/providers/electron.service.ts` (renderer tarafı Electron bridge)
   - `main/ipcPrinter.ts` (printer IPC)
+
+
 
 <!-- ops:gen-repo-map:start -->
 

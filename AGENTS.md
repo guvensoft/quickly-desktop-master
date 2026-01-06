@@ -1,51 +1,46 @@
-# Agent Operating Guide (AI Agent Ready)
+# Agent Guide (Agent-Understanding Ready)
 
-Bu dosya, QuicklyPOS Desktop repo’sunda bir agent’ın **deterministik**, **düşük maliyetli** ve **güvenli** şekilde ilerlemesi için operasyon modelini tanımlar.
+## Purpose
 
-## 1) Okuma Sırası (SSOT)
+Bu dosya, QuicklyPOS Desktop repo’sunda agent’ların kod tabanını **hızlı ve doğru** anlaması ve değişiklikleri **güvenli** şekilde yapması için zorunlu kuralları tanımlar.
+
+## Read Order (Required)
 
 1) `AGENTS.md`
 2) `docs/repo-map.md`
-3) İlgili alan dokümanları:
-   - Mimari: `docs/architecture/*`
-   - Domain: `docs/domain/*`
-   - API: `docs/api/*`
-   - Data: `docs/data/*`
-   - Kararlar: `docs/decisions/*`
-4) Kodda minimum okuma ile kanıt topla:
-   - İndeks/graf: `docs/knowledge/*` (manuel düzenleme yok; `npm run index` ile üretilir)
+3) `docs/architecture/*`
+4) `docs/domain/*`
+5) `docs/api/*`
+6) `docs/data/*`
+7) `docs/decisions/*`
 
-## 2) Değişiklik Öncesi Zorunlu Kontroller
+Opsiyonel ama önerilen:
 
-Değişiklik türüne göre en az şu komutlar çalıştırılır:
+- Code navigation: `docs/code/symbol-index.md`, `docs/code/module-boundaries.md`
+- Generated indeks: `docs/knowledge/*` (manuel düzenleme yok; `npm run index`)
 
-- Build: `npm run build`
-- Tests (en az): `npm run test:compile`
-- Tests (çalışıyorsa): `npm run test` veya `npm run test:debug`
-- Lint (workspace uygunsa): `npm run lint`
-- Repo health: `npm run verify` (default’ta test `TEST_UNSTABLE` olarak `WARN` ile skip edilebilir; `VERIFY_STRICT=1` ile zorlanır)
+## Allowed Actions / Guardrails
 
-## 3) Güvenli Çalışma Kuralları
-
-- Minimum değişiklik: aynı PR’da refactor + davranış değişikliği karıştırma.
-- Riskli refactor yok: Angular/Electron legacy kodu “temizlemek” için geniş çaplı rename/move yapma.
-- Yeni dependency ekleme:
+- Üretilmiş/indirilen artefact’lara dokunma: `dist/`, `node_modules/`, `app-builds/` (varsa), `out-tsc/` (varsa), `coverage/` (varsa)
+- Secrets/credential ekleme yok (API key, token, password, private URL).
+  - `.env` örneği gerekiyorsa placeholder ile: `TODO (needs confirmation)` + dummy values.
+- Büyük refactor yok: geniş çaplı rename/move, “cleanup” PR’ları, toolchain migration bu kapsamda yapılmaz.
+- Yeni dependency:
   - Varsayılan: ekleme yok.
-  - Zorunluysa: neden, alternatifler, risk ve rollback dokümante et (ADR veya Change Request).
-- Küçük ve geri alınabilir commit’ler: her commit tek bir niyet taşısın.
+  - Zorunluysa: gerekçe + alternatifler + lisans/size + rollback notu (ADR veya Change Request) şart.
 
-## 4) Dokunma/Yasaklı Alanlar
+## Required Checks BEFORE Finalize
 
-Üretilmiş/indirilen artefact’lara dokunma:
+Repo’da gerçek olan komutlarla minimum doğrulama:
 
-- `dist/`
-- `node_modules/`
-- `app-builds/` (varsa)
-- `out-tsc/` (varsa)
-- `coverage/` (varsa)
-- `docs/knowledge/*.json` (elle düzenleme yok; `npm run index`)
+- Docs verify: `ops/scripts/verify-docs.sh`
+- Build: `npm run build`
+- TypeScript compile sanity (Chrome olmadan): `npm run test:compile`
+- Unit-ish tests (çalışıyorsa): `npm run test` veya `npm run test:debug`
+- Lint (workspace uygunsa): `npm run lint`
+- Repo health: `npm run verify` (default test `WARN skipped=TEST_UNSTABLE`; `VERIFY_STRICT=1` ile enforce)
 
-## 5) Kod Standartları (Repo’nun mevcut stili)
+## Coding Conventions (Repo’ya Uygun)
 
 - Angular (legacy):
   - Component: `*.component.ts`, Service: `*.service.ts`, Guard: `*.guard.service.ts`
@@ -57,25 +52,23 @@ Değişiklik türüne göre en az şu komutlar çalıştırılır:
   - Mevcut kod `console.log` ağırlıklı; yeni logging framework ekleme.
   - Sessiz catch blokları eklemekten kaçın; en azından hata yüzeyi bırak.
 
-## 6) Golden Paths (Repo’dan görülen kritik akışlar)
+## Golden Paths (Repo’dan görülen kritik akışlar)
 
 - Login/Setup: `src/app/app-routing.module.ts` (route `''`) → `LoginComponent`, `SetupComponent`.
 - Satış: `StoreComponent` → `SellingScreenComponent` → `PaymentScreenComponent`.
 - Gün Sonu: `EndofthedayComponent` + remote çağrılar (`/store/backup`, `/store/refresh`, `/store/endday`).
 
-## 7) Test-as-Spec
+## Test-as-Spec
 
 - Unit-ish (Karma): `karma.conf.js` + `src/test.ts`
 - E2E (Protractor, legacy): `e2e/` + `protractor.conf.js`
 
-## 8) Çıktı Formatı (Agent Output)
+## Output Format for Every Task
 
-Her iş tesliminde şu sırayı takip et:
+Her iş tesliminde şu sırayı takip et (kısa ve kanıta dayalı):
 
 1) Plan
-2) Kanıt (dosya yolu + kısa alıntı/özet)
-3) Uygulama (minimum değişiklik)
-4) Doğrulama (çalıştırılan komutlar + sonuç)
+2) Patch summary (hangi dosyalar, neden)
+3) Verification (çalıştırılan komutlar + sonuç)
 5) Doküman güncellemesi (gerekliyse)
 6) Özet + rollback
-
