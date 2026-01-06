@@ -2,6 +2,8 @@
 // https://karma-runner.github.io/0.13/config/configuration-file.html
 
 module.exports = function (config) {
+  const chromeProfileDir = process.env.KARMA_CHROME_PROFILE || '';
+
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular/cli'],
@@ -38,16 +40,26 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: false,
+    concurrency: 1,
+    captureTimeout: 180000,
+    browserDisconnectTimeout: 180000,
+    browserNoActivityTimeout: 180000,
+    browserDisconnectTolerance: 2,
     browsers: ['ChromeHeadlessNoSandbox'],
     singleRun: true,
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',
+        ...(chromeProfileDir ? { chromeDataDir: chromeProfileDir } : {}),
         flags: [
           '--no-sandbox',
-          '--disable-gpu',
           '--disable-dev-shm-usage',
-          '--disable-software-rasterizer'
+          '--disable-software-rasterizer',
+          '--disable-background-networking',
+          '--disable-backgrounding-occluded-windows',
+          '--disable-web-security',
+          '--allow-running-insecure-content',
+          '--window-size=1280,800'
         ]
       }
     }

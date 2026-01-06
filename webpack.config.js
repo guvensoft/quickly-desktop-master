@@ -13,7 +13,17 @@ const customProperties = require('postcss-custom-properties');
 const { NoEmitOnErrorsPlugin, SourceMapDevToolPlugin, DefinePlugin, NamedModulesPlugin } = require('webpack');
 const { BaseHrefWebpackPlugin, NamedLazyChunksWebpackPlugin, InsertConcatAssetsWebpackPlugin } = require('@angular/cli/plugins/webpack');
 const { CommonsChunkPlugin } = require('webpack').optimize;
-const { AngularCompilerPlugin } = require('@ngtools/webpack');
+const preferredNgtoolsWebpackPath = '@angular/cli/node_modules/@ngtools/webpack';
+let ngtoolsWebpack;
+let ngtoolsWebpackLoader;
+try {
+  ngtoolsWebpack = require(preferredNgtoolsWebpackPath);
+  ngtoolsWebpackLoader = preferredNgtoolsWebpackPath;
+} catch (e) {
+  ngtoolsWebpack = require('@ngtools/webpack');
+  ngtoolsWebpackLoader = '@ngtools/webpack';
+}
+const { AngularCompilerPlugin } = ngtoolsWebpack;
 const ConcatPlugin = require('webpack-concat-plugin');
 
 const nodeModules = path.join(process.cwd(), 'node_modules');
@@ -542,7 +552,7 @@ module.exports = {
       },
       {
         "test": /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-        "loader": "@ngtools/webpack"
+        "loader": ngtoolsWebpackLoader
       },
     ]
   },

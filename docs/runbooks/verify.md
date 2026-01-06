@@ -39,3 +39,4 @@ Readiness `FAIL` olduğunda beklenen aksiyon:
 
 - NPM v7+ (peer-deps strict): Kurulumda `ERESOLVE unable to resolve dependency tree` görürsen `npm install --legacy-peer-deps` (opsiyonel: `--no-package-lock`) kullan.
 - Native dependency’ler (özellikle `serialport` / `node-sass`) güncel Node sürümlerinde derlenemeyebilir. Bu repo için pratikte daha eski bir Node sürümü (örn. `nvm` ile) gerekebilir.
+- `@ngtools/webpack` duplication / "wrong class" hatası: Test tarafı `@angular/cli` üzerinden `@ngtools/webpack` yüklerken, build tarafı farklı bir fiziksel kopyayı yüklerse sınıf kimlikleri uyuşmayabilir. Bu yüzden `webpack.config.js` içinde `AngularCompilerPlugin` ve loader için tercih edilen path `@angular/cli/node_modules/@ngtools/webpack` olmalıdır (fallback sadece bu path bulunamazsa devreye girer).
