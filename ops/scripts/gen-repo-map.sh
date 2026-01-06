@@ -80,11 +80,13 @@ if grep -Fqx "$start_marker" "$target" && grep -Fqx "$end_marker" "$target"; the
 
   # Re-insert the generated block at the end to keep the update deterministic.
   # (Repo-map is SSOT; generated summary is an appended helper section.)
-  echo >> "$tmp"
+  node -e "const fs=require('fs');const p='$tmp';let s=fs.readFileSync(p,'utf8');s=s.replace(/\\n+$/,'\\n');fs.writeFileSync(p,s);"
+  printf "\n" >> "$tmp"
   block_content >> "$tmp"
 else
   cat "$target" > "$tmp"
-  echo >> "$tmp"
+  node -e "const fs=require('fs');const p='$tmp';let s=fs.readFileSync(p,'utf8');s=s.replace(/\\n+$/,'\\n');fs.writeFileSync(p,s);"
+  printf "\n" >> "$tmp"
   block_content >> "$tmp"
 fi
 

@@ -6,9 +6,6 @@ Bu dosya `ops/scripts/gen-symbol-index.sh` tarafından üretilir.
 
 - `ops/scripts/gen-symbol-index.sh`
 
-
-
-
 <!-- ops:gen-symbol-index:start -->
 
 ## Exports (TS/JS)

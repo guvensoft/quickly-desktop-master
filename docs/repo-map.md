@@ -122,8 +122,6 @@ Bu repo’da ayrıca indexer tarafından üretilen otomatik harita vardır:
   - `src/app/providers/electron.service.ts` (renderer tarafı Electron bridge)
   - `main/ipcPrinter.ts` (printer IPC)
 
-
-
 <!-- ops:gen-repo-map:start -->
 
 ## Generated Summary (ops/scripts/gen-repo-map.sh)

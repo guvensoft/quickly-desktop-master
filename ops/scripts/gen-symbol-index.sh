@@ -103,7 +103,8 @@ Bu dosya `ops/scripts/gen-symbol-index.sh` tarafından üretilir.
 EOF
 fi
 
-echo >> "$target"
+node -e "const fs=require('fs');const p='$target';let s=fs.readFileSync(p,'utf8');s=s.replace(/\\n+$/,'\\n');fs.writeFileSync(p,s);"
+printf "\n" >> "$target"
 render_block >> "$target"
 
 echo "Updated $target"
