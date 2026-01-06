@@ -4,13 +4,15 @@
 
 - `npm run test` Karma’yı **headless + single-run** modda çalıştırır.
 - `npm run test:trace` aynı koşuyu, `EISDIR` tespiti için `fs-trace` preload ile çalıştırır.
-- Karma port’u `0` kullanır (ephemeral), paralel/karma test koşularında port çakışmasını azaltır.
+- Karma port’u gerekirse otomatik artar (örn. 9876 doluysa 9877). `--port 0` kullanılmaz (Chrome `localhost:0` ile capture olamayabilir).
 - `EISDIR: illegal operation on a directory, read` hatası olduğunda path’i ve callsite stack’i loglar.
 
 ## Komutlar
 
 - `npm run test`
 - `npm run test:trace`
+- `npm run test:debug` (Karma debug log)
+- `npm run test:compile` (Chrome olmadan `tsc --noEmit`)
 - `npm run verify` (içinde `test` step’i varsa `npm run test` çağırır)
 
 ## EISDIR Trace
@@ -52,5 +54,5 @@ Log formatı:
 ## Notlar
 
 - Karma `ChromeHeadlessNoSandbox` (ChromeHeadless + `--no-sandbox --disable-gpu`) ile çalışır.
-- macOS’te `CHROME_BIN` set değilse default olarak `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` kullanılır (`karma.conf.js` içinde).
+- macOS’te `CHROME_BIN` set değilse default olarak `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` kullanılır (`tools/agent/karma-run.js` içinde).
 - `ChromeHeadless` bazen `/private/tmp/karma-chrome*/SingletonLock` yüzünden start edemeyebilir; bu durumda `rm -rf /private/tmp/karma-chrome*` ile manuel cleanup yap.

@@ -1,0 +1,103 @@
+openapi: 3.0.3
+info:
+  title: QuicklyPOS Desktop - Known HTTP Contracts (Minimal)
+  version: "0.1.0"
+  description: |
+    Minimal OpenAPI stub based on endpoints referenced in the repo.
+
+    IMPORTANT:
+    - This is not a full contract; request/response schemas need confirmation.
+    - Unknown fields are represented as `type: object` with TODO notes.
+servers:
+  - url: https://hq.quickly.com.tr
+paths:
+  /store/login/:
+    post:
+      summary: Store login (token acquisition)
+      description: "Referenced by setup flow."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: "TODO (needs confirmation): username/password payload."
+      responses:
+        "200":
+          description: "TODO (needs confirmation): token response."
+          content:
+            application/json:
+              schema:
+                type: object
+  /store/list/:
+    get:
+      summary: List stores
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+          description: "Auth token."
+      responses:
+        "200":
+          description: "TODO (needs confirmation): store list."
+          content:
+            application/json:
+              schema:
+                type: object
+  /store/backup:
+    post:
+      summary: Upload end-of-day backup
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: "TODO (needs confirmation): backup payload."
+      responses:
+        "200":
+          description: "OK"
+  /store/refresh:
+    post:
+      summary: Refresh token
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO (needs confirmation): refreshed token."
+          content:
+            application/json:
+              schema:
+                type: object
+  /store/endday:
+    post:
+      summary: End-of-day remote action
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              description: "TODO (needs confirmation): endday request payload."
+      responses:
+        "200":
+          description: "OK"
+

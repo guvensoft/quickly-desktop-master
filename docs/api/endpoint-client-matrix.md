@@ -18,6 +18,12 @@ Bu liste, mevcut kodda görülen frontend çağrılarından çıkarılmıştır.
 | `/store/endday` | POST | `src/app/components/endoftheday/endoftheday.component.ts` | Uzak tarafta gün sonu/purge işlemi |
 | `v1/management/restaurants/:restaurantID/report_generator/` | POST | `src/app/components/admin/admin.component.ts` | Admin test aracı (management) |
 
+## Local App Server (Electron main)
+
+- `main/appServer.ts` Electron main process içinde Express + `express-pouchdb` ile bir endpoint mount eder:
+  - `/<token>/` altında PouchDB admin/app endpoint’leri
+  - Assumption/TODO: Bu endpoint seti `express-pouchdb` tarafından sağlanır; OpenAPI kapsamı için ayrıca dokümante edilmelidir.
+
 ## Notlar / Gaps
 
 - Bu repo’da endpoint kullanımı iki şekilde yapılır:
