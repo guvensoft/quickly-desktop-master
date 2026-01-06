@@ -2,6 +2,10 @@
 
 Bu indeks, repo dokümantasyonunun SSOT giriş noktalarını listeler.
 
+## Quick start
+
+- Low-token navigation guide: `FAST_CONTEXT.md`
+
 ## Operasyon Modeli
 
 - Agent çalışma kuralları: `AGENTS.md`
