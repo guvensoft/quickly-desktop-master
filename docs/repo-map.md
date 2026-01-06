@@ -22,6 +22,7 @@ Bu repo’da ayrıca indexer tarafından üretilen otomatik harita vardır:
 - `e2e/`: Protractor e2e testleri (legacy).
 - `webpack.config.js`: Bundle/build pipeline (Angular CLI yerine webpack).
 - `electron-builder.json`: Paketleme (Electron Builder) ayarları.
+- `tools/`: Repo ops araçları (verify/indexer vb.).
 
 ## Runtime Akışı (Electron + Angular)
 
@@ -47,6 +48,41 @@ Bu repo’da ayrıca indexer tarafından üretilen otomatik harita vardır:
   - `src/app/app-routing.module.ts`
   - `src/app/app.component.ts`
 
+## Build / Test / Lint (Repo’dan)
+
+- Build: `npm run build` (webpack bundle + electron main compile)
+- Lint: `npm run lint` (Angular CLI lint; bazı ortamlarda workspace uyarıları olabilir)
+- Tests (Karma):
+  - `npm run test:compile` (Chrome olmadan compile sanity)
+  - `npm run test` (headless)
+  - `npm run test:debug` (karma debug logs)
+- Verify (repo health): `npm run verify` (default’ta test `TEST_UNSTABLE` olarak `WARN` ile skip edilebilir; `VERIFY_STRICT=1` ile enforce)
+
+## Konfigürasyonlar
+
+- Angular CLI (legacy): `.angular-cli.json`
+- TypeScript: `tsconfig.json`, `src/tsconfig.*.json`, `tsconfig.electron.json`
+- Webpack: `webpack.config.js`
+- Karma: `karma.conf.js`
+- Protractor: `protractor.conf.js`
+- Electron packaging: `electron-builder.json`
+
+## 3rd Party / Entegrasyonlar (Repo’dan görülen)
+
+- Remote HQ base URL: `https://hq.quickly.com.tr` (`src/app/services/http.service.ts`)
+- Local DB + sync: PouchDB (`src/app/services/main.service.ts`)
+- Main process HTTP server (in-memory PouchDB): `main/appServer.ts` (Express + `express-pouchdb`)
+- Device integration:
+  - Printer (ESC/POS): `main/ipcPrinter.ts`
+  - Caller/scaler: `main/callerServer.ts`, `main/scalerServer.ts`
+
+## Değiştirirken Dikkat
+
+- Electron main ↔ Angular renderer sınırı: OS/driver erişimi `main/*` içinde kalmalı.
+- Test/Build toolchain: Karma `@angular/cli` plugin zinciri kullanır; webpack tarafında `@ngtools/webpack` tek fiziksel kopya hedeflenmelidir (bkz. `webpack.config.js`).
+- Üretilmiş artefact’lara dokunma: `dist/`, `node_modules/`, `app-builds/` (varsa), `docs/knowledge/*.json`.
+
+
 ## Sık Kullanılan Altyapı Bileşenleri (Kısa Rehber)
 
 - Auth / guard:
@@ -62,3 +98,22 @@ Bu repo’da ayrıca indexer tarafından üretilen otomatik harita vardır:
 - Device integration (Electron):
   - `src/app/providers/electron.service.ts` (renderer tarafı Electron bridge)
   - `main/ipcPrinter.ts` (printer IPC)
+
+<!-- ops:gen-repo-map:start -->
+
+## Generated Summary (ops/scripts/gen-repo-map.sh)
+
+- Stack: Angular 5.0.3, Electron 1.8.1, webpack 3.8.1
+- Electron main entry: `main.ts`
+- Electron services: `main/*.ts`
+- Angular bootstrap: `src/main.ts`
+- Angular routes: `src/app/app-routing.module.ts`
+- Generated/artefacts (do not edit): `dist/`, `node_modules/`, `app-builds/` (if present), `out-tsc/` (if present), `coverage/` (if present)
+
+- Key scripts (from `package.json`):
+  - build: `npm run build`
+  - lint: `npm run lint`
+  - tests: `npm run test` / `npm run test:debug` / `npm run test:compile`
+  - verify: `npm run verify`
+
+<!-- ops:gen-repo-map:end -->

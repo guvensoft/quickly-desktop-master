@@ -1,61 +1,81 @@
-# Agent Operating Constitution (QuicklyPOS Desktop)
+# Agent Operating Guide (AI Agent Ready)
 
-Bu repo, Codex ve diğer agent’ların **deterministik** ve **düşük maliyetli** şekilde doğru dosyalara inebilmesi için “önce indeks → sonra dosya” prensibiyle işletilir.
+Bu dosya, QuicklyPOS Desktop repo’sunda bir agent’ın **deterministik**, **düşük maliyetli** ve **güvenli** şekilde ilerlemesi için operasyon modelini tanımlar.
 
-## 0) Altın Kurallar (Asla İhlal Etme)
+## 1) Okuma Sırası (SSOT)
 
-1. **Önce kanıt topla, sonra değiştir**: Her değişiklik önerisi, ilgili dosyalardan alınmış kanıt (dosya yolu + kısa alıntı/özet) ile başlar.
-2. **Önce indeks → sonra dosya**: İhtiyacın olan bağlamı önce `docs/knowledge/` çıktılarından ve `docs/repo-map.md`’den al; ardından minimum sayıda kaynak dosya oku.
-3. **SSOT**: Yapısal bilgi tek yerde yaşar. Repo haritası → `docs/repo-map.md`, kararlar → `docs/decisions/`, indeks çıktıları → `docs/knowledge/`.
-4. **Slice disiplini**: Slice kapanmadan yeni slice açılmaz (bkz. `tasks/templates/slice.md`).
+1) `AGENTS.md`
+2) `docs/repo-map.md`
+3) İlgili alan dokümanları:
+   - Mimari: `docs/architecture/*`
+   - Domain: `docs/domain/*`
+   - API: `docs/api/*`
+   - Data: `docs/data/*`
+   - Kararlar: `docs/decisions/*`
+4) Kodda minimum okuma ile kanıt topla:
+   - İndeks/graf: `docs/knowledge/*` (manuel düzenleme yok; `npm run index` ile üretilir)
 
-## 1) Repo Sınırları
+## 2) Değişiklik Öncesi Zorunlu Kontroller
 
-- Çalışma kökü: repo root (`quickly-desktop-master`). Üst dizine çıkma.
-- Dokunma/özel dikkat:
-  - `docs/knowledge/*.json`: Üretilmiş çıktılar; elle düzenleme yerine `node tools/indexer/index.js` çalıştır.
-  - `dist/`, `app-builds/`, `node_modules/`: Üretilmiş/indirilen artefaktlar (varsa) — değişiklik yapma.
+Değişiklik türüne göre en az şu komutlar çalıştırılır:
 
-## 2) Dosya Okuma Bütçesi (Varsayılan)
+- Build: `npm run build`
+- Tests (en az): `npm run test:compile`
+- Tests (çalışıyorsa): `npm run test` veya `npm run test:debug`
+- Lint (workspace uygunsa): `npm run lint`
+- Repo health: `npm run verify` (default’ta test `TEST_UNSTABLE` olarak `WARN` ile skip edilebilir; `VERIFY_STRICT=1` ile zorlanır)
 
-- **Keşif (Discovery) bütçesi**: max **10 dosya** veya **800 satır**.
-- Bütçe aşımı gerekiyorsa önce “neden”i yaz ve alternatiflerini belirt (indeks/graf vs.).
+## 3) Güvenli Çalışma Kuralları
 
-## 3) Zorunlu İş Akışı (Agent Flow)
+- Minimum değişiklik: aynı PR’da refactor + davranış değişikliği karıştırma.
+- Riskli refactor yok: Angular/Electron legacy kodu “temizlemek” için geniş çaplı rename/move yapma.
+- Yeni dependency ekleme:
+  - Varsayılan: ekleme yok.
+  - Zorunluysa: neden, alternatifler, risk ve rollback dokümante et (ADR veya Change Request).
+- Küçük ve geri alınabilir commit’ler: her commit tek bir niyet taşısın.
 
-1. `docs/repo-map.md` ile doğru alanı seç.
-2. `docs/knowledge/` (components/services/modules/imports graph) ile hedef dosyaları daralt.
-3. Gerekirse ilgili modül pack’ini oku: `docs/modules/<module>/README.md`.
-4. Değişiklikten önce: “Etki alanı”, “risk”, “test/verify” ve “rollback” notu üret.
+## 4) Dokunma/Yasaklı Alanlar
 
-## 4) Slice Guardrails
+Üretilmiş/indirilen artefact’lara dokunma:
 
-- Slice başına:
-  - max **12 dosya** değişikliği
-  - max **400 satır** net değişiklik (ekleme+silme)
-- Slice kapanış kriteri:
-  - Acceptance criteria ✅
-  - Doğrulama komutları çalıştı ✅ (veya neden çalışmadı)
-  - Değişen dosyalar listelendi ✅
+- `dist/`
+- `node_modules/`
+- `app-builds/` (varsa)
+- `out-tsc/` (varsa)
+- `coverage/` (varsa)
+- `docs/knowledge/*.json` (elle düzenleme yok; `npm run index`)
 
-## 5) Build / Test / Verify (Mevcut Script’ler)
+## 5) Kod Standartları (Repo’nun mevcut stili)
 
-> Proje Angular 5 + Electron (legacy) ve webpack tabanlıdır.
+- Angular (legacy):
+  - Component: `*.component.ts`, Service: `*.service.ts`, Guard: `*.guard.service.ts`
+  - Route/guard sınırlarını koru: `src/app/app-routing.module.ts`, `src/app/guards/*`
+- Electron main process:
+  - OS/driver işleri `main/*.ts` altında; renderer tarafına sızdırma.
+  - IPC mesajlarını kontrollü ve minimal tut.
+- Error handling/logging:
+  - Mevcut kod `console.log` ağırlıklı; yeni logging framework ekleme.
+  - Sessiz catch blokları eklemekten kaçın; en azından hata yüzeyi bırak.
 
-- Install: `npm install`
-- Lint: `npm run lint`
-- Unit test: `npm test`
-- Dev (Electron): `npm run start` veya `npm run electron:serve`
-- Build (webpack + electron main compile): `npm run build`
-- Prod build: `npm run build:prod`
-- Paketleme: `npm run electron:mac` / `npm run electron:windows` / `npm run electron:linux`
+## 6) Golden Paths (Repo’dan görülen kritik akışlar)
 
-## 6) Kod İstihbaratı (Indexer)
+- Login/Setup: `src/app/app-routing.module.ts` (route `''`) → `LoginComponent`, `SetupComponent`.
+- Satış: `StoreComponent` → `SellingScreenComponent` → `PaymentScreenComponent`.
+- Gün Sonu: `EndofthedayComponent` + remote çağrılar (`/store/backup`, `/store/refresh`, `/store/endday`).
 
-- Çalıştır: `node tools/indexer/index.js`
-- Üretir:
-  - `docs/knowledge/components.json`
-  - `docs/knowledge/services.json`
-  - `docs/knowledge/modules.json`
-  - `docs/knowledge/imports-graph.json`
+## 7) Test-as-Spec
+
+- Unit-ish (Karma): `karma.conf.js` + `src/test.ts`
+- E2E (Protractor, legacy): `e2e/` + `protractor.conf.js`
+
+## 8) Çıktı Formatı (Agent Output)
+
+Her iş tesliminde şu sırayı takip et:
+
+1) Plan
+2) Kanıt (dosya yolu + kısa alıntı/özet)
+3) Uygulama (minimum değişiklik)
+4) Doğrulama (çalıştırılan komutlar + sonuç)
+5) Doküman güncellemesi (gerekliyse)
+6) Özet + rollback
 
