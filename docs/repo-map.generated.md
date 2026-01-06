@@ -43,7 +43,7 @@ Bu dosya `node tools/indexer/index.js` tarafından üretilir. Elle düzenlemeyin
 - `src/app/components/endoftheday/endoftheday.component.ts` → `13` imports
 - `src/app/components/store/store.component.ts` → `13` imports
 - `src/app/components/setup/setup.component.ts` → `11` imports
-- `src/app/components/settings/customer-settings/customer-settings.component.ts` → `10` imports
 - `src/app/components/store/payment-screen/payment-screen.component.ts` → `10` imports
-- `src/app/components/endoftheday/day-detail/day-detail.component.ts` → `9` imports
+- `src/app/components/settings/customer-settings/customer-settings.component.ts` → `10` imports
+- `src/app/components/helpers/caller/caller.component.ts` → `9` imports
 

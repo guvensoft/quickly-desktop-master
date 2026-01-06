@@ -10,6 +10,34 @@ const packageJsonPath = path.join(repoRoot, 'package.json');
 const nodeModulesPath = path.join(repoRoot, 'node_modules');
 const nodeModulesBinPath = path.join(nodeModulesPath, '.bin');
 
+function enforceNodeMajor10() {
+  const nodeVersion = String(process.versions && process.versions.node ? process.versions.node : '');
+  const major = Number.parseInt(nodeVersion.split('.')[0], 10);
+  const allowModernNode = String(process.env.ALLOW_MODERN_NODE || '') === '1';
+
+  console.log('VERIFY_STEP node_version START');
+
+  if (major === 10) {
+    console.log(`VERIFY_STEP node_version PASS expected=10 actual=${JSON.stringify(nodeVersion)}`);
+    return;
+  }
+
+  if (allowModernNode) {
+    console.log(
+      `VERIFY_STEP node_version PASS bypass=1 expected=10 actual=${JSON.stringify(nodeVersion)} env=ALLOW_MODERN_NODE`,
+    );
+    return;
+  }
+
+  console.log(
+    `VERIFY_STEP node_version FAIL expected=10 actual=${JSON.stringify(nodeVersion)} hint=${JSON.stringify(
+      'Use nvm (see .nvmrc) or set ALLOW_MODERN_NODE=1 to bypass.',
+    )}`,
+  );
+  console.log('VERIFY_SUMMARY FAIL');
+  process.exit(1);
+}
+
 function readPackageJson() {
   try {
     const raw = fs.readFileSync(packageJsonPath, 'utf8');
@@ -103,6 +131,8 @@ function runIndex(scripts) {
 }
 
 function main() {
+  enforceNodeMajor10();
+
   const pkg = readPackageJson();
   const scripts = pkg.scripts || {};
 
