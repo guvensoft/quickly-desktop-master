@@ -1,44 +1,41 @@
-# Bugfix (Template)
+# ACTIVE SLICE — BUGFIX
+
+Title: {{TITLE}}
+Date: {{DATE}}
+Repo: {{REPO_ROOT}}
 
 ## Symptom
 
-<!-- Error text, stack trace, or behavior -->
+TODO: What breaks? Include observed error text if any.
 
-## Repro Steps
+## Repro steps
 
-1)
-2)
+TODO: Steps to reproduce (TODO allowed if not yet reproducible).
 
-## Expected vs Actual
+## Suspected area (file paths)
 
-- Expected:
-- Actual:
+- TODO: `path/to/file.ts` (why)
 
-## Scope / Blast Radius
+## Fix plan (minimal)
 
-- Affected module(s):
-- Platforms: (macOS/Windows/Linux)
-- Risk level:
-
-## Evidence (Required)
-
-- Logs:
-- Files inspected:
-  - `path/to/file`: summary
-
-## Fix Strategy
-
-- Root cause:
-- Fix:
-- Alternatives considered:
+- TODO: Smallest change that fixes root cause (file paths + rationale).
+- Constraints:
+  - No broad refactor / rename
+  - Keep Electron main vs Angular renderer boundary (`main/*` vs `src/*`)
 
 ## Verification
 
-- `npm run build`
-- `npm run test:compile`
-- `npm run test:debug` (capture diagnostics)
+- TODO: Repro is fixed (steps and expected result).
+- Repo gates (run unless truly impossible):
+  - [ ] `npm run docs:verify`
+  - [ ] `npm run build`
+  - [ ] `npm run test:compile`
+- Relevant tests (pick what applies):
+  - [ ] `npm run test`
+  - [ ] `npm run test:debug`
 
-## Rollback
+## Evidence (Required: BEFORE + AFTER)
 
-- Revert commit(s) / files:
+- BEFORE: TODO (error/log/stack trace + where it was seen)
+- AFTER: TODO (command output / screenshot note / log snippet proving fix)
 

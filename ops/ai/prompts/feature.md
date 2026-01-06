@@ -1,42 +1,63 @@
-# Feature (Template)
+# ACTIVE SLICE — FEATURE
 
-## Feature Statement
+Title: {{TITLE}}
+Date: {{DATE}}
+Repo: {{REPO_ROOT}}
 
-<!-- What new capability will exist? -->
+## Goal
 
-## Non-Goals
+TODO: What user-facing behavior is added/changed? (1–3 sentences)
 
-<!-- Explicitly out of scope -->
+## Non-goals
 
-## Constraints
+- TODO: What is explicitly out of scope (to prevent creep).
 
-- Preserve legacy Angular/Electron patterns unless explicitly migrating.
-- Avoid introducing new dependencies unless justified.
+## Read order (Required)
 
-## User Flow
+1) `AGENTS.md`
+2) `docs/repo-map.md`
+3) `docs/code/symbol-index.md`
+4) Relevant docs (pick what applies):
+   - `docs/architecture/*`
+   - `docs/domain/*`
+   - `docs/api/*`
+   - `docs/data/*`
+   - `docs/decisions/*`
 
-1)
-2)
+Boundary guidance:
+- Electron main process: OS/driver/IPC work stays in `main/*`.
+- Angular renderer: UI/state/HTTP stays in `src/app/*`. Renderer talks to main only via the existing Electron bridge (`src/app/providers/electron.service.ts`).
 
-## Technical Design (Lightweight)
+## Plan (files + risks)
 
-- UI components:
-- Services/data:
-- Electron main IPC (if needed):
-- Config/env:
+- Files to touch:
+  - TODO: `path/to/file.ts`
+- Risks / edge cases:
+  - TODO: e.g. migration, IPC contract, offline behavior.
 
-## Evidence (Required)
+## Patch checklist
 
-- Similar existing implementation:
-  - `path`: why it’s similar
-
-## Plan
-
-1)
-2)
+- [ ] Minimal diffs (no broad refactor / rename)
+- [ ] Renderer/main boundary respected (`main/*` vs `src/*`)
+- [ ] No secrets added (no tokens/keys/private URLs)
+- [ ] Evidence section filled (required for pre-commit gate)
 
 ## Verification
 
-- `npm run build`
-- `npm run test:compile`
+- Required (repo gates):
+  - [ ] `npm run docs:verify`
+  - [ ] `npm run build`
+  - [ ] `npm run test:compile`
+- Relevant tests (pick what applies):
+  - [ ] `npm run test`
+  - [ ] `npm run test:debug`
+  - [ ] Manual smoke: TODO (steps)
+
+## Docs updates
+
+- TODO: Update docs if behavior/contracts changed (file paths).
+
+## Evidence (Required)
+
+- TODO: At least 1 verifiable artifact (command output, file path, log snippet, screenshot note).
 
