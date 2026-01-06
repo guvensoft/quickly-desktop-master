@@ -52,6 +52,7 @@
     "symbols:method": "node tools/agent/query-symbols.js --method",
     "symbols:file": "node tools/agent/query-symbols.js --file",
     "symbols:source": "node tools/agent/query-symbols.js --source",
+    "symbols:name:full": "node tools/agent/query-symbols.js --format json --full --name",
     "verify": "node tools/agent/verify.js",
     "slice:question": "node tools/agent/run-slice.js question",
     "slice:feature": "node tools/agent/run-slice.js feature",

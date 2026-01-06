@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 function parseArgs(args) {
-  var options = { format: "json" };
+  var options = { format: "text" };
   var i;
   for (i = 0; i < args.length; i += 1) {
     var arg = args[i];
@@ -15,6 +15,15 @@ function parseArgs(args) {
     if (arg === "--format") {
       i += 1;
       options.format = args[i] || "json";
+      continue;
+    }
+    if (arg === "--full") {
+      options.full = true;
+      continue;
+    }
+    if (arg === "--members") {
+      options.members = true;
+      options.format = "json";
       continue;
     }
     if (arg === "--name") {
@@ -76,7 +85,9 @@ function printHelp() {
   console.log("--kind <export kind>");
   console.log("--decorator <decorator name>");
   console.log("--contains <substring>");
-  console.log("--format json|text  (default json)");
+  console.log("--format json|text  (default text)");
+  console.log("--full           include members like the JSON dump");
+  console.log("--members        shortcut to JSON output with members only");
 }
 
 function matchesContains(substring, file, exp) {
@@ -145,7 +156,35 @@ function copyExport(exp, members) {
   return copy;
 }
 
-function toTextOutput(files) {
+function getConstructorParamTypes(members) {
+  var params = [];
+  for (var i = 0; i < members.length; i += 1) {
+    var member = members[i];
+    if (member.kind === "constructor" && Array.isArray(member.params)) {
+      for (var j = 0; j < member.params.length; j += 1) {
+        var param = member.params[j];
+        params.push(param.type || param.name || "unknown");
+      }
+      break;
+    }
+  }
+  return params;
+}
+
+function getMethodNames(members) {
+  var names = [];
+  for (var i = 0; i < members.length; i += 1) {
+    var member = members[i];
+    if (member.kind === "method" && member.name) {
+      names.push(member.name);
+    }
+  }
+  return names.slice().sort(function(a, b) {
+    return a.localeCompare(b);
+  });
+}
+
+function toTextOutput(files, totalMatches) {
   var buffer = [];
   for (var i = 0; i < files.length; i += 1) {
     var file = files[i];
@@ -156,22 +195,27 @@ function toTextOutput(files) {
     );
     for (var j = 0; j < file.exports.length; j += 1) {
       var exp = file.exports[j];
-      var memberNames = [];
-      for (var k = 0; k < exp.members.length; k += 1) {
-        memberNames.push(exp.members[k].name);
+      var decoratorSegment = "";
+      if (Array.isArray(exp.decorators) && exp.decorators.length) {
+        decoratorSegment = " [" + exp.decorators.join(", ") + "]";
       }
+      buffer.push("  - " + exp.kind + " " + exp.name + decoratorSegment);
+      var constructorParams = getConstructorParamTypes(exp.members || []);
+      if (constructorParams.length) {
+        buffer.push(
+          "    - constructor params: " + constructorParams.join(", ")
+        );
+      }
+      var methodNames = getMethodNames(exp.members || []);
       buffer.push(
-        "  - " +
-          exp.kind +
-          " " +
-          exp.name +
-          (memberNames.length
-            ? " → methods: " + memberNames.join(", ")
-            : "")
+        "    - methods (" +
+          methodNames.length +
+          "): " +
+          (methodNames.length ? methodNames.join(", ") : "none")
       );
     }
   }
-  buffer.push("matches: " + files.reduce(function(sum, f) { return sum + f.exports.length; }, 0));
+  buffer.push("matches: " + totalMatches);
   return buffer.join("\n");
 }
 
@@ -197,6 +241,36 @@ function sortFiles(files) {
     var right = b.file || "";
     return left.localeCompare(right);
   });
+}
+
+function ensureExportSummary(exp, includeMembers) {
+  var summary = {
+    kind: exp.kind,
+    name: exp.name,
+    decorators: exp.decorators,
+    memberCount: Array.isArray(exp.members) ? exp.members.length : 0
+  };
+  if (includeMembers) {
+    summary.members = exp.members;
+  }
+  return summary;
+}
+
+function serializeJsonFiles(files, includeMembers) {
+  var serialized = [];
+  for (var i = 0; i < files.length; i += 1) {
+    var file = files[i];
+    var exportsData = [];
+    for (var j = 0; j < file.exports.length; j += 1) {
+      exportsData.push(ensureExportSummary(file.exports[j], includeMembers));
+    }
+    serialized.push({
+      file: file.file,
+      sourceId: file.sourceId,
+      exports: exportsData
+    });
+  }
+  return serialized;
 }
 
 function run() {
@@ -296,12 +370,13 @@ function run() {
     process.exit(2);
   }
   if (options.format === "text") {
-    console.log(toTextOutput(sortedFiles));
+    console.log(toTextOutput(sortedFiles, totalMatches));
     return;
   }
+  var includeMembers = !!(options.full || options.members);
   var output = {
     matches: totalMatches,
-    files: sortedFiles
+    files: serializeJsonFiles(sortedFiles, includeMembers)
   };
   console.log(JSON.stringify(output, null, 2));
 }

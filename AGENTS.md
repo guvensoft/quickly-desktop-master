@@ -1,111 +1,247 @@
-# Agent Guide (Agent-Understanding Ready)
+# AGENTS.md — Agent Operating Guide (v1.1)
 
 ## Purpose
 
-Bu dosya, QuicklyPOS Desktop repo’sunda agent’ların kod tabanını **hızlı ve doğru** anlaması ve değişiklikleri **güvenli** şekilde yapması için zorunlu kuralları tanımlar.
+Bu dosya, QuicklyPOS Desktop repo’sunda agent’ların kod tabanını **minimum token**, **maksimum isabet** ile anlaması ve çalışması için bağlayıcı kuralları tanımlar.
+
+Amaç:
+
+* Rastgele dosya taramasını önlemek
+* Büyük dosyaları (örn. `symbols.json`) açmadan hedefe inmek
+* Agent’ın **ne bildiğini / ne bilemeyeceğini** netleştirmek
+* Halüsinasyon (dosya/symbol uydurma) riskini engellemek
+
+---
 
 ## Read Order (Required)
 
-- AGENTS.md → FAST_CONTEXT.md → docs/repo-map.md → docs/code/symbol-index.md → docs/knowledge/* → ...
+**Varsayılan akış (low-token):**
 
-1) `AGENTS.md`
-2) `docs/repo-map.md`
-3) `docs/architecture/*`
-4) `docs/domain/*`
-5) `docs/api/*`
-6) `docs/data/*`
-7) `docs/decisions/*`
+```
+AGENTS.md
+→ FAST_CONTEXT.md
+→ docs/repo-map.md
+→ docs/code/symbol-index.md
+→ npm run symbols:*   (query)
+→ docs/knowledge/*
+→ (gerekirse) hedef kod dosyası
+```
 
-Opsiyonel ama önerilen:
+Detay dokümantasyon (ihtiyaca göre):
 
-- Code navigation: `docs/code/symbol-index.md`, `docs/code/module-boundaries.md`
-- Generated indeks: `docs/knowledge/*` (manuel düzenleme yok; `npm run index`)
+1. `docs/architecture/*`
+2. `docs/domain/*`
+3. `docs/api/*`
+4. `docs/data/*`
+5. `docs/decisions/*`
+
+---
+
+## Knowledge Coverage (No Code Read)
+
+Kod dosyalarını açmadan elde edilebilecek bilgi sınırları:
+
+| Alan                                                  | Kapsama                 |
+| ----------------------------------------------------- | ----------------------- |
+| Structure / Navigation (repo-map, symbols, knowledge) | **90–100%**             |
+| Architecture (C4, ADR)                                | **80–90%**              |
+| Domain / Business flow                                | **60–75%**              |
+| Behavior / How it works                               | **25–50%**              |
+| Implementation details                                | **0–20% (kod gerekir)** |
+
+> Agent bu sınırların ötesinde iddia kurmamalıdır.
+
+---
 
 ## Allowed Actions / Guardrails
 
-- Üretilmiş/indirilen artefact’lara dokunma: `dist/`, `node_modules/`, `app-builds/` (varsa), `out-tsc/` (varsa), `coverage/` (varsa)
-- Secrets/credential ekleme yok (API key, token, password, private URL).
-  - `.env` örneği gerekiyorsa placeholder ile: `TODO (needs confirmation)` + dummy values.
-- Büyük refactor yok: geniş çaplı rename/move, “cleanup” PR’ları, toolchain migration bu kapsamda yapılmaz.
-- Yeni dependency:
-  - Varsayılan: ekleme yok.
-  - Zorunluysa: gerekçe + alternatifler + lisans/size + rollback notu (ADR veya Change Request) şart.
+* **Üretilmiş/indirilen artefact’lara dokunma**:
+  `dist/`, `node_modules/`, `app-builds/`, `out-tsc/`, `coverage/`
+* **Secrets ekleme yok**: API key, token, password, private URL.
 
-## Required Checks BEFORE Finalize
+  * `.env` gerekiyorsa sadece placeholder:
+    `TODO (needs confirmation)`
+* **Büyük refactor yok**: geniş rename/move, cleanup PR’ları, toolchain migration.
+* **Yeni dependency**:
 
-Repo’da gerçek olan komutlarla minimum doğrulama:
+  * Varsayılan: ❌
+  * Zorunluysa: gerekçe + alternatifler + lisans/size + rollback notu (ADR).
 
-- Docs verify: `ops/scripts/verify-docs.sh`
-- Build: `npm run build`
-- TypeScript compile sanity (Chrome olmadan): `npm run test:compile`
-- Unit-ish tests (çalışıyorsa): `npm run test` veya `npm run test:debug`
-- Lint (workspace uygunsa): `npm run lint`
-- Repo health: `npm run verify` (default test `WARN skipped=TEST_UNSTABLE`; `VERIFY_STRICT=1` ile enforce)
+---
 
 ## Coding Conventions (Repo’ya Uygun)
 
-- Angular (legacy):
-  - Component: `*.component.ts`, Service: `*.service.ts`, Guard: `*.guard.service.ts`
-  - Route/guard sınırlarını koru: `src/app/app-routing.module.ts`, `src/app/guards/*`
-- Electron main process:
-  - OS/driver işleri `main/*.ts` altında; renderer tarafına sızdırma.
-  - IPC mesajlarını kontrollü ve minimal tut.
-- Error handling/logging:
-  - Mevcut kod `console.log` ağırlıklı; yeni logging framework ekleme.
-  - Sessiz catch blokları eklemekten kaçın; en azından hata yüzeyi bırak.
+### Angular (legacy)
 
-## Golden Paths (Repo’dan görülen kritik akışlar)
+* Component: `*.component.ts`
+* Service: `*.service.ts`
+* Guard: `*.guard.service.ts`
+* Routing/guard sınırlarını koru:
 
-- Login/Setup: `src/app/app-routing.module.ts` (route `''`) → `LoginComponent`, `SetupComponent`.
-- Satış: `StoreComponent` → `SellingScreenComponent` → `PaymentScreenComponent`.
-- Gün Sonu: `EndofthedayComponent` + remote çağrılar (`/store/backup`, `/store/refresh`, `/store/endday`).
+  * `src/app/app-routing.module.ts`
+  * `src/app/guards/*`
 
-## Test-as-Spec
+### Electron (main process)
 
-- Unit-ish (Karma): `karma.conf.js` + `src/test.ts`
-- E2E (Protractor, legacy): `e2e/` + `protractor.conf.js`
+* OS/driver işleri **sadece** `main/*.ts`
+* Renderer tarafına Node/OS logic sızdırma
+* IPC mesajlarını minimal ve kontrollü tut
 
-## Output Format for Every Task
+### Logging / Error Handling
 
-Her iş tesliminde şu sırayı takip et (kısa ve kanıta dayalı):
+* Mevcut yapı `console.log` ağırlıklı
+* Yeni logging framework ekleme
+* Sessiz `catch {}` bloklarından kaçın
 
-1) Plan
-2) Patch summary (hangi dosyalar, neden)
-3) Verification (çalıştırılan komutlar + sonuç)
-5) Doküman güncellemesi (gerekliyse)
-6) Özet + rollback
+---
 
-## LIGHT MODE (fast, low-friction)
+## Golden Paths (High-Level)
 
-- Amaç: Soru/keşif/planlama ve düşük riskli değişikliklerde hızlı ilerlemek; test/build/verify zorunlu değil ama öneriliyor.
-- Default read order: `AGENTS.md` → `docs/repo-map.md` → `docs/code/symbol-index.md` → `docs/knowledge/*.json` → gerekliyse hedef kod dosyaları.
-- Output format: dosya yolu + kısa kanıt + önerilen bir sonraki adım. Evidence bloğu varsa kısa notlarla desteklenmeli; sadece öneri olarak yazılan verify/test komutları çalıştırılmaz.
-- Eğer `npm run index` veya kod yapısı değiştiyse `docs/knowledge/*.json` güncellenmeli; `npm run index` önerilir.
-- Sıkı mod (STRICT MODE) gerektiğinde `REQUIRE_VERIFY=1` ile `npm run verify`, `npm run test:compile`, `npm run build` gibi kontrolleri isteğe bağlı çalıştır.
-- Sembol aramaları için `docs/knowledge/symbols.json`, `symbols.by-source.json` ve `sources.json` içindeki `sourceId`/source tanımlarını kullanarak renderer (`app`) vs main (`electron`) filtrelemesi yapılmalı.
-- `docs/knowledge/symbols.json` büyük; önce `npm run symbols:*` CLI ile sorgulayarak yeterli kanıt topla.
+* **Login / Setup**
+  `app-routing.module.ts` → `LoginComponent`, `SetupComponent`
 
-## No Fabrication (low-token)
+* **Sales Flow**
+  `StoreComponent` → `SellingScreenComponent` → `PaymentScreenComponent`
 
-- Dosya/symbol id’lerini `FAST_CONTEXT.md`, `docs/repo-map.md`, `docs/code/symbol-index.md` veya `npm run symbols:*` komutlarıyla doğrulamadan söyleme.
-- Query sıfır dönerse “kodda aramam gerek” diye not al veya `npm run index` çalıştırıp tekrar dene.
+* **End of Day**
+  `EndofthedayComponent`
+  Remote endpoints:
+  `/store/backup`, `/store/refresh`, `/store/endday`
 
-### Örnek: QUESTION — “PouchDB sync nerede?”
-- Read order: AGENTS → repo-map → symbol-index → docs/knowledge/symbols.json → `src/app/services`.
-- Evidence önerisi: `src/app/services/sync.service.ts` içindeki `syncToServer` metodu.
-- Next step: “Assumption: PouchDB sync kodu main/renderer boundary’sinde, `tasks/ACTIVE_SLICE.md`’de plan hazırlanır.”
+---
 
-### Örnek: FEATURE — “Küçük UI değişikliği”
-- Read order: AGENTS → repo-map → module-boundaries → relevant component.
-- Evidence: ilgili component template ve renderer/main boundary (Angular component + Electron IPC).
-- Next step: “Test: lokal serve + npm run index if component signature changed.”
+## FAST_CONTEXT.md (Critical)
 
-### Örnek: BUGFIX — “Uygulama crash oluyor”
-- Read order: AGENTS → repo-map → docs/knowledge/symbols.json → `src/app/services/`. 
-- Evidence: `main/electron/index.ts` logundan crash stack trace + `src/app/providers/electron.service.ts` method referansı.
-- Next step: “Retry after adding focused unit/QA, optionally `npm run agent:verify` for strict.”
+`FAST_CONTEXT.md` bu repo için **tek bakışta mimari** sunar.
 
-### Örnek: UPGRADE — “Angular/Electron’ın küçük sürüm bump’ı”
-- Read order: AGENTS → repo-map → docs/knowledge/symbols.json → `package.json`.
-- Evidence: dependency list + relevant `src` entry points (renderer/main).
-- Next step: “STRICT MODE: `REQUIRE_VERIFY=1` ile docs/index/test/build çalıştır.”
+* İlk **60 saniyede** okunması önerilir
+* Hangi soruda nereye bakılacağını söyler
+* Agent’ı doğrudan hedef dosyaya indirir
+
+---
+
+## Low-Token Symbol Navigation (Mandatory)
+
+`docs/knowledge/symbols.json` **büyüktür**.
+Doğrudan okumak **yasaktır**.
+
+Önce **query CLI** kullanılır:
+
+```bash
+npm run symbols:name -- "EndofthedayComponent"
+npm run symbols:method -- "uploadBackup"
+npm run symbols:source -- "electron"
+```
+
+Bu komutlar:
+
+* dosya yolu
+* sourceId (app / electron)
+* class / method imzaları
+  bilgisini **büyük dosya açmadan** verir.
+
+---
+
+## LIGHT MODE (Default)
+
+### Amaç
+
+* Soru, keşif, planlama
+* Düşük riskli değişiklikler
+
+### Varsayılan Akış
+
+* AGENTS → FAST_CONTEXT → repo-map → symbol-index → `npm run symbols:*`
+* Test / build / verify **zorunlu değil**
+
+### Ne Zaman Kod Açılır?
+
+* Query sonucu 0 ise
+* Davranış bilgisi gerekiyorsa
+  → **sadece ilgili dosya** açılır
+
+---
+
+## STRICT MODE (Opt-in)
+
+Aşağıdaki durumlarda kullanılır:
+
+* Release
+* Geniş etki alanı olan değişiklikler
+* `REQUIRE_VERIFY=1` açıkken
+
+### Recommended Checks (Strict Only)
+
+* Docs verify: `ops/scripts/verify-docs.sh`
+* Build: `npm run build`
+* TS sanity: `npm run test:compile`
+* Tests (çalışıyorsa): `npm run test`
+* Lint (uygunsa): `npm run lint`
+* Repo health: `npm run verify`
+
+> Varsayılan değildir.
+
+---
+
+## Output Contract (Mandatory)
+
+Her cevap şu yapıyı izler:
+
+1. **Hedef** (ne aranıyor?)
+2. **Kanıt**
+
+   * repo-map / symbol-index / `npm run symbols:*`
+3. **Sonuç** (kısa ve net)
+4. **Next Step** (gerekirse)
+
+Notlar:
+
+* Kod dosyası açıldıysa **açıkça belirt**
+* Açılmadıysa özellikle belirt
+
+---
+
+## No Fabrication (Hard Rule)
+
+* Dosya / class / method adı:
+
+  * repo-map
+  * symbol-index
+  * `npm run symbols:*`
+    ile doğrulanmadan **asla söylenmez**
+* Query sonucu 0 ise:
+
+  * “Kodda aramam gerekiyor” denir
+  * veya `npm run index` önerilir
+* Örnekler bile uydurma olamaz
+
+---
+
+## Task Examples (Calibrated)
+
+### QUESTION — “PouchDB sync nerede?”
+
+* Query: `npm run symbols:method -- "sync"`
+* Kanıt: bulunan class/file
+* Not: Dosya adı varsayımı yapılmaz
+
+### FEATURE — “Küçük UI değişikliği”
+
+* Query: `symbols:name` (component)
+* Boundary check: renderer vs electron
+* Test önerisi: sadece gerekirse
+
+### BUGFIX — “Crash”
+
+* Kanıt: log → symbol query → hedef dosya
+* Kod: **yalnızca ilgili dosya**
+
+### UPGRADE — “Sürüm bump”
+
+* STRICT MODE
+* `REQUIRE_VERIFY=1`
+
+---
+
+**Bu dosya, agent için bağlayıcıdır.**
+Kurallara uymayan cevaplar geçersiz sayılır.
