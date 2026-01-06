@@ -46,3 +46,12 @@ Değişiklik türüne göre ek olarak:
 - `npm run build`
 - `npm run test` (çalışıyorsa)
 
+## Agent Task Runner
+
+1) `npm run agent:feature -- "..."` (veya question/bugfix/upgrade) komutuyla:
+   - `run-slice` template’i çalışır (`tasks/ACTIVE_SLICE.md` oluşur)
+   - Evidence için repository genelinde keyword araması yapılır
+   - Indexer, `docs:verify` ve `test:compile` sırayla çalışır
+   - Çıktılar `tasks/ACTIVE_SLICE.md` → `Evidence:` bölümüne yazılır
+
+2) Artık sadece `git diff`/`review` ve commit/push kalır; patch üretimi LLM/agent tarafında yapılır. Runner “patch” üretmez, sadece slice + evidence + verify otomasyonunu sağlar.

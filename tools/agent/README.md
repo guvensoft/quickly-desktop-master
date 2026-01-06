@@ -15,3 +15,16 @@ Kullanım:
 
 - `node tools/agent/run-slice.js`
 
+## Best Practices & Usage Examples
+
+1) Genel Prensipler
+- Agent görevleri **her zaman slice ile başlatılır**
+- Kanıtsız (Evidence’sız) ilerleme yapılmaz
+- Kod değiştiyse: knowledge index + docs verify zorunludur
+- “Bitirdim” demek = pre-commit + pre-push geçmek demektir
+
+2) Soru Cevaplama (Question)
+Örnek:
+```bash
+npm run slice:question -- "Electron renderer ile main arasında IPC akışı nerede?"
+```
