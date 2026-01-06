@@ -28,6 +28,8 @@ Bu repo legacy bir Angular 5 + Electron uygulamasıdır. Amaç: mevcut davranı�
   - Headless run: `npm run test`
   - Debug logs: `npm run test:debug`
 - Verify (repo health): `npm run verify`
+- Docs verify: `ops/scripts/verify-docs.sh`
+- Doc navigation (generated): `ops/scripts/gen-symbol-index.sh`, `ops/scripts/gen-repo-map.sh`
 
 ## Branch / PR
 
@@ -45,4 +47,3 @@ Bu repo legacy bir Angular 5 + Electron uygulamasıdır. Amaç: mevcut davranı�
 
 - Agent operasyon modeli: `AGENTS.md`
 - Doküman doğrulama: `ops/scripts/verify-docs.sh`
-
