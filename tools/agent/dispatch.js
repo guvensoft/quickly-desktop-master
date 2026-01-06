@@ -75,14 +75,6 @@ function guessType(text) {
   return 'feature';
 }
 
-function shouldRunVerify(type, wantsVerify) {
-  if (type === 'question') {
-    console.log('NOTE: Question slices skip heavy verification by default.');
-    return false;
-  }
-  return wantsVerify;
-}
-
 function main() {
   const { type: explicitType, text, verifyFlag } = parseArgs(process.argv);
   if (!text) {
@@ -102,10 +94,19 @@ function main() {
   }
 
   const wantsVerify = verifyFlag || process.env.REQUIRE_VERIFY === '1';
-  const runVerify = shouldRunVerify(type, wantsVerify);
 
-  if (runVerify) {
-    const commands = ['index', 'docs:verify', 'test:compile', 'build'];
+  console.log('Default flow: slice created + index executed.');
+  if (pkg.scripts && typeof pkg.scripts.index === 'string') {
+    const indexResult = runCommand('npm', ['run', 'index']);
+    if (indexResult.code !== 0) {
+      die(`npm run index failed (code=${indexResult.code})`);
+    }
+  } else {
+    console.log('INFO: npm run index scripti tanımlı değil; atlandı.');
+  }
+
+  if (wantsVerify) {
+    const commands = ['docs:verify', 'test:compile', 'build'];
     for (const script of commands) {
       if (pkg.scripts && typeof pkg.scripts[script] === 'string') {
         const result = runCommand('npm', ['run', script]);
@@ -118,7 +119,7 @@ function main() {
     }
     console.log('Optional verification pipeline completed.');
   } else {
-    console.log('Slice ready. Optional verifications: npm run index && npm run docs:verify && npm run test:compile && npm run build (use --verify or REQUIRE_VERIFY=1).');
+    console.log('Heavy verification disabled by default (use --verify or REQUIRE_VERIFY=1).');
   }
 }
 
