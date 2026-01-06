@@ -1,0 +1,1642 @@
+{
+  "generatedAt": "2026-01-05T23:55:38.808Z",
+  "scannedRoots": [
+    "src",
+    "main"
+  ],
+  "tsFileCount": 82,
+  "edges": [
+    {
+      "from": "main/appServer.ts",
+      "import": "cors"
+    },
+    {
+      "from": "main/appServer.ts",
+      "import": "electron"
+    },
+    {
+      "from": "main/appServer.ts",
+      "import": "express"
+    },
+    {
+      "from": "main/appServer.ts",
+      "import": "express-pouchdb"
+    },
+    {
+      "from": "main/appServer.ts",
+      "import": "pouchdb"
+    },
+    {
+      "from": "main/appServer.ts",
+      "import": "pouchdb-adapter-memory"
+    },
+    {
+      "from": "main/callerServer.ts",
+      "import": "child_process"
+    },
+    {
+      "from": "main/callerServer.ts",
+      "import": "electron"
+    },
+    {
+      "from": "main/ipcPrinter.ts",
+      "import": "../src/app/mocks/endoftheday"
+    },
+    {
+      "from": "main/ipcPrinter.ts",
+      "import": "app/mocks/check"
+    },
+    {
+      "from": "main/ipcPrinter.ts",
+      "import": "electron"
+    },
+    {
+      "from": "main/ipcPrinter.ts",
+      "import": "escpos"
+    },
+    {
+      "from": "main/scalerServer.ts",
+      "import": "@serialport"
+    },
+    {
+      "from": "main/scalerServer.ts",
+      "import": "child_process"
+    },
+    {
+      "from": "main/scalerServer.ts",
+      "import": "electron"
+    },
+    {
+      "from": "main/scalerServer.ts",
+      "import": "serialport"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./components/activation/activation.component"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./components/admin/admin.component"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./components/cashbox/cashbox.component"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./components/endoftheday/endoftheday.component"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./components/home/home.component"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./components/login/login.component"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./components/reports/reports.component"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./components/settings/settings.component"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./components/setup/setup.component"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./components/store/payment-screen/payment-screen.component"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./components/store/selling-screen/selling-screen.component"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./components/store/store.component"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./guards/auth.guard.service"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "./services/auth.service"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/app-routing.module.ts",
+      "import": "@angular/router"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./mocks/check"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./mocks/order"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./mocks/print"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./mocks/product"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./mocks/settings"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./mocks/table"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./providers/caller-id.service"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./providers/electron.service"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./providers/message.service"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./providers/printer.service"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./providers/scaler.service"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./services/application.service"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./services/auth.service"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./services/conflict.service"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./services/main.service"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "./services/settings.service"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/app.component.ts",
+      "import": "@angular/router"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./app-routing.module"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./app.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/activation/activation.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/admin/admin.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/cashbox/cashbox.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/endoftheday/day-detail/day-detail.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/endoftheday/endoftheday.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/helpers/caller/caller.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/helpers/keyboard/keyboard.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/helpers/message/message.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/home/home.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/login/login.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/reports/activity-reports/activity-reports.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/reports/cashbox-reports/cashbox-reports.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/reports/notifications-reports/notifications-reports.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/reports/product-reports/product-reports.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/reports/reports.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/reports/stock-reports/stock-reports.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/reports/store-reports/store-reports.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/reports/table-reports/table-reports.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/reports/user-reports/user-reports.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/settings/application-settings/application-settings.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/settings/customer-settings/customer-settings.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/settings/menu-settings/menu-settings.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/settings/printer-settings/printer-settings.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/settings/recipe-settings/recipe-settings.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/settings/restaurant-settings/restaurant-settings.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/settings/settings.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/settings/stock-settings/stock-settings.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/settings/user-settings/user-settings.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/setup/setup.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/store/payment-screen/payment-screen.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/store/selling-screen/selling-screen.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./components/store/store.component"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./directives/button.directive"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./directives/keyboard.directive"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./pipes/general.pipe"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./pipes/price.pipe"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./pipes/timeago.pipe"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./providers/caller-id.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./providers/electron.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./providers/keyboard.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./providers/message.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./providers/printer.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./providers/scaler.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./providers/terminal.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./services/application.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./services/auth.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./services/conflict.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./services/http.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./services/log.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./services/main.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "./services/settings.service"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "@angular/http"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "@angular/platform-browser"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "ng2-charts"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "ngx-mask"
+    },
+    {
+      "from": "src/app/app.module.ts",
+      "import": "raven-js"
+    },
+    {
+      "from": "src/app/components/activation/activation.component.ts",
+      "import": "../../providers/electron.service"
+    },
+    {
+      "from": "src/app/components/activation/activation.component.ts",
+      "import": "../../services/main.service"
+    },
+    {
+      "from": "src/app/components/activation/activation.component.ts",
+      "import": "../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/activation/activation.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/admin/admin.component.ts",
+      "import": "../../mocks/product"
+    },
+    {
+      "from": "src/app/components/admin/admin.component.ts",
+      "import": "../../mocks/report"
+    },
+    {
+      "from": "src/app/components/admin/admin.component.ts",
+      "import": "../../mocks/settings"
+    },
+    {
+      "from": "src/app/components/admin/admin.component.ts",
+      "import": "../../mocks/table"
+    },
+    {
+      "from": "src/app/components/admin/admin.component.ts",
+      "import": "../../services/http.service"
+    },
+    {
+      "from": "src/app/components/admin/admin.component.ts",
+      "import": "../../services/main.service"
+    },
+    {
+      "from": "src/app/components/admin/admin.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/admin/admin.component.ts",
+      "import": "fs"
+    },
+    {
+      "from": "src/app/components/cashbox/cashbox.component.ts",
+      "import": "../../mocks/cashbox"
+    },
+    {
+      "from": "src/app/components/cashbox/cashbox.component.ts",
+      "import": "../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/cashbox/cashbox.component.ts",
+      "import": "../../services/log.service"
+    },
+    {
+      "from": "src/app/components/cashbox/cashbox.component.ts",
+      "import": "../../services/main.service"
+    },
+    {
+      "from": "src/app/components/cashbox/cashbox.component.ts",
+      "import": "../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/cashbox/cashbox.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/cashbox/cashbox.component.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/components/endoftheday/day-detail/day-detail.component.ts",
+      "import": "../../../mocks/cashbox"
+    },
+    {
+      "from": "src/app/components/endoftheday/day-detail/day-detail.component.ts",
+      "import": "../../../mocks/check"
+    },
+    {
+      "from": "src/app/components/endoftheday/day-detail/day-detail.component.ts",
+      "import": "../../../mocks/endoftheday"
+    },
+    {
+      "from": "src/app/components/endoftheday/day-detail/day-detail.component.ts",
+      "import": "../../../mocks/log"
+    },
+    {
+      "from": "src/app/components/endoftheday/day-detail/day-detail.component.ts",
+      "import": "../../../mocks/report"
+    },
+    {
+      "from": "src/app/components/endoftheday/day-detail/day-detail.component.ts",
+      "import": "../../../providers/electron.service"
+    },
+    {
+      "from": "src/app/components/endoftheday/day-detail/day-detail.component.ts",
+      "import": "../../../providers/printer.service"
+    },
+    {
+      "from": "src/app/components/endoftheday/day-detail/day-detail.component.ts",
+      "import": "../../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/endoftheday/day-detail/day-detail.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "../../mocks/cashbox"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "../../mocks/check"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "../../mocks/endoftheday"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "../../mocks/log"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "../../mocks/report"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "../../providers/electron.service"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "../../providers/printer.service"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "../../services/conflict.service"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "../../services/http.service"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "../../services/main.service"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/endoftheday/endoftheday.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/helpers/caller/caller.component.ts",
+      "import": "../../../mocks/caller"
+    },
+    {
+      "from": "src/app/components/helpers/caller/caller.component.ts",
+      "import": "../../../mocks/check"
+    },
+    {
+      "from": "src/app/components/helpers/caller/caller.component.ts",
+      "import": "../../../mocks/customer"
+    },
+    {
+      "from": "src/app/components/helpers/caller/caller.component.ts",
+      "import": "../../../providers/caller-id.service"
+    },
+    {
+      "from": "src/app/components/helpers/caller/caller.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/helpers/caller/caller.component.ts",
+      "import": "../../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/helpers/caller/caller.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/helpers/caller/caller.component.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/components/helpers/caller/caller.component.ts",
+      "import": "@angular/router"
+    },
+    {
+      "from": "src/app/components/helpers/keyboard/keyboard.component.ts",
+      "import": "../../../providers/keyboard.service"
+    },
+    {
+      "from": "src/app/components/helpers/keyboard/keyboard.component.ts",
+      "import": "../../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/helpers/keyboard/keyboard.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/helpers/keyboard/keyboard.component.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/components/helpers/keyboard/keyboard.component.ts",
+      "import": "rxjs/Subscription"
+    },
+    {
+      "from": "src/app/components/helpers/message/message.component.ts",
+      "import": "../../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/helpers/message/message.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/helpers/message/message.component.ts",
+      "import": "rxjs/Subscription"
+    },
+    {
+      "from": "src/app/components/home/home.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/home/home.component.ts",
+      "import": "@angular/router"
+    },
+    {
+      "from": "src/app/components/login/login.component.ts",
+      "import": "../../mocks/user"
+    },
+    {
+      "from": "src/app/components/login/login.component.ts",
+      "import": "../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/login/login.component.ts",
+      "import": "../../services/auth.service"
+    },
+    {
+      "from": "src/app/components/login/login.component.ts",
+      "import": "../../services/main.service"
+    },
+    {
+      "from": "src/app/components/login/login.component.ts",
+      "import": "../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/login/login.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/login/login.component.ts",
+      "import": "@angular/router"
+    },
+    {
+      "from": "src/app/components/reports/activity-reports/activity-reports.component.ts",
+      "import": "../../../mocks/report"
+    },
+    {
+      "from": "src/app/components/reports/activity-reports/activity-reports.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/reports/activity-reports/activity-reports.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/reports/cashbox-reports/cashbox-reports.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/reports/notifications-reports/notifications-reports.component.spec.ts",
+      "import": "./notifications-reports.component"
+    },
+    {
+      "from": "src/app/components/reports/notifications-reports/notifications-reports.component.spec.ts",
+      "import": "@angular/core/testing"
+    },
+    {
+      "from": "src/app/components/reports/notifications-reports/notifications-reports.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/reports/product-reports/product-reports.component.ts",
+      "import": "../../../mocks/log"
+    },
+    {
+      "from": "src/app/components/reports/product-reports/product-reports.component.ts",
+      "import": "../../../mocks/product"
+    },
+    {
+      "from": "src/app/components/reports/product-reports/product-reports.component.ts",
+      "import": "../../../mocks/report"
+    },
+    {
+      "from": "src/app/components/reports/product-reports/product-reports.component.ts",
+      "import": "../../../mocks/settings"
+    },
+    {
+      "from": "src/app/components/reports/product-reports/product-reports.component.ts",
+      "import": "../../../providers/printer.service"
+    },
+    {
+      "from": "src/app/components/reports/product-reports/product-reports.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/reports/product-reports/product-reports.component.ts",
+      "import": "../../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/reports/product-reports/product-reports.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/reports/reports.component.ts",
+      "import": "../../mocks/report"
+    },
+    {
+      "from": "src/app/components/reports/reports.component.ts",
+      "import": "../../services/main.service"
+    },
+    {
+      "from": "src/app/components/reports/reports.component.ts",
+      "import": "../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/reports/reports.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/reports/stock-reports/stock-reports.component.ts",
+      "import": "../../../mocks/log"
+    },
+    {
+      "from": "src/app/components/reports/stock-reports/stock-reports.component.ts",
+      "import": "../../../mocks/stocks"
+    },
+    {
+      "from": "src/app/components/reports/stock-reports/stock-reports.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/reports/stock-reports/stock-reports.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/reports/store-reports/store-reports.component.ts",
+      "import": "../../../mocks/check"
+    },
+    {
+      "from": "src/app/components/reports/store-reports/store-reports.component.ts",
+      "import": "../../../mocks/log"
+    },
+    {
+      "from": "src/app/components/reports/store-reports/store-reports.component.ts",
+      "import": "../../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/reports/store-reports/store-reports.component.ts",
+      "import": "../../../providers/printer.service"
+    },
+    {
+      "from": "src/app/components/reports/store-reports/store-reports.component.ts",
+      "import": "../../../services/log.service"
+    },
+    {
+      "from": "src/app/components/reports/store-reports/store-reports.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/reports/store-reports/store-reports.component.ts",
+      "import": "../../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/reports/store-reports/store-reports.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/reports/store-reports/store-reports.component.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/components/reports/table-reports/table-reports.component.ts",
+      "import": "../../../mocks/log"
+    },
+    {
+      "from": "src/app/components/reports/table-reports/table-reports.component.ts",
+      "import": "../../../mocks/report"
+    },
+    {
+      "from": "src/app/components/reports/table-reports/table-reports.component.ts",
+      "import": "../../../mocks/table"
+    },
+    {
+      "from": "src/app/components/reports/table-reports/table-reports.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/reports/table-reports/table-reports.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/reports/user-reports/user-reports.component.ts",
+      "import": "../../../mocks/log"
+    },
+    {
+      "from": "src/app/components/reports/user-reports/user-reports.component.ts",
+      "import": "../../../mocks/report"
+    },
+    {
+      "from": "src/app/components/reports/user-reports/user-reports.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/reports/user-reports/user-reports.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/settings/application-settings/application-settings.component.ts",
+      "import": "../../../mocks/settings"
+    },
+    {
+      "from": "src/app/components/settings/application-settings/application-settings.component.ts",
+      "import": "../../../providers/electron.service"
+    },
+    {
+      "from": "src/app/components/settings/application-settings/application-settings.component.ts",
+      "import": "../../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/settings/application-settings/application-settings.component.ts",
+      "import": "../../../providers/printer.service"
+    },
+    {
+      "from": "src/app/components/settings/application-settings/application-settings.component.ts",
+      "import": "../../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/settings/application-settings/application-settings.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/settings/application-settings/application-settings.component.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/components/settings/application-settings/application-settings.component.ts",
+      "import": "@angular/router"
+    },
+    {
+      "from": "src/app/components/settings/customer-settings/customer-settings.component.ts",
+      "import": "../../../mocks/check"
+    },
+    {
+      "from": "src/app/components/settings/customer-settings/customer-settings.component.ts",
+      "import": "../../../mocks/customer"
+    },
+    {
+      "from": "src/app/components/settings/customer-settings/customer-settings.component.ts",
+      "import": "../../../mocks/report"
+    },
+    {
+      "from": "src/app/components/settings/customer-settings/customer-settings.component.ts",
+      "import": "../../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/settings/customer-settings/customer-settings.component.ts",
+      "import": "../../../providers/printer.service"
+    },
+    {
+      "from": "src/app/components/settings/customer-settings/customer-settings.component.ts",
+      "import": "../../../services/log.service"
+    },
+    {
+      "from": "src/app/components/settings/customer-settings/customer-settings.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/settings/customer-settings/customer-settings.component.ts",
+      "import": "../../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/settings/customer-settings/customer-settings.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/settings/customer-settings/customer-settings.component.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/components/settings/menu-settings/menu-settings.component.ts",
+      "import": "../../../mocks/product"
+    },
+    {
+      "from": "src/app/components/settings/menu-settings/menu-settings.component.ts",
+      "import": "../../../mocks/report"
+    },
+    {
+      "from": "src/app/components/settings/menu-settings/menu-settings.component.ts",
+      "import": "../../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/settings/menu-settings/menu-settings.component.ts",
+      "import": "../../../services/log.service"
+    },
+    {
+      "from": "src/app/components/settings/menu-settings/menu-settings.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/settings/menu-settings/menu-settings.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/settings/menu-settings/menu-settings.component.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/components/settings/menu-settings/menu-settings.component.ts",
+      "import": "app/mocks/settings"
+    },
+    {
+      "from": "src/app/components/settings/printer-settings/printer-settings.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/settings/recipe-settings/recipe-settings.component.ts",
+      "import": "../../../mocks/product"
+    },
+    {
+      "from": "src/app/components/settings/recipe-settings/recipe-settings.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/settings/recipe-settings/recipe-settings.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/settings/restaurant-settings/restaurant-settings.component.ts",
+      "import": "../../../mocks/report"
+    },
+    {
+      "from": "src/app/components/settings/restaurant-settings/restaurant-settings.component.ts",
+      "import": "../../../mocks/table"
+    },
+    {
+      "from": "src/app/components/settings/restaurant-settings/restaurant-settings.component.ts",
+      "import": "../../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/settings/restaurant-settings/restaurant-settings.component.ts",
+      "import": "../../../services/log.service"
+    },
+    {
+      "from": "src/app/components/settings/restaurant-settings/restaurant-settings.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/settings/restaurant-settings/restaurant-settings.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/settings/restaurant-settings/restaurant-settings.component.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/components/settings/settings.component.ts",
+      "import": "./../../providers/electron.service"
+    },
+    {
+      "from": "src/app/components/settings/settings.component.ts",
+      "import": "./../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/settings/settings.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/settings/stock-settings/stock-settings.component.ts",
+      "import": "../../../mocks/stocks"
+    },
+    {
+      "from": "src/app/components/settings/stock-settings/stock-settings.component.ts",
+      "import": "../../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/settings/stock-settings/stock-settings.component.ts",
+      "import": "../../../services/log.service"
+    },
+    {
+      "from": "src/app/components/settings/stock-settings/stock-settings.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/settings/stock-settings/stock-settings.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/settings/stock-settings/stock-settings.component.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/components/settings/user-settings/user-settings.component.ts",
+      "import": "../../../mocks/report"
+    },
+    {
+      "from": "src/app/components/settings/user-settings/user-settings.component.ts",
+      "import": "../../../mocks/user"
+    },
+    {
+      "from": "src/app/components/settings/user-settings/user-settings.component.ts",
+      "import": "../../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/settings/user-settings/user-settings.component.ts",
+      "import": "../../../services/log.service"
+    },
+    {
+      "from": "src/app/components/settings/user-settings/user-settings.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/settings/user-settings/user-settings.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/settings/user-settings/user-settings.component.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/components/setup/setup.component.ts",
+      "import": "../../mocks/report"
+    },
+    {
+      "from": "src/app/components/setup/setup.component.ts",
+      "import": "../../mocks/settings"
+    },
+    {
+      "from": "src/app/components/setup/setup.component.ts",
+      "import": "../../mocks/user"
+    },
+    {
+      "from": "src/app/components/setup/setup.component.ts",
+      "import": "../../providers/electron.service"
+    },
+    {
+      "from": "src/app/components/setup/setup.component.ts",
+      "import": "../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/setup/setup.component.ts",
+      "import": "../../services/main.service"
+    },
+    {
+      "from": "src/app/components/setup/setup.component.ts",
+      "import": "../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/setup/setup.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/setup/setup.component.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/components/setup/setup.component.ts",
+      "import": "@angular/http"
+    },
+    {
+      "from": "src/app/components/setup/setup.component.ts",
+      "import": "@angular/router"
+    },
+    {
+      "from": "src/app/components/store/payment-screen/payment-screen.component.ts",
+      "import": "../../../mocks/check"
+    },
+    {
+      "from": "src/app/components/store/payment-screen/payment-screen.component.ts",
+      "import": "../../../mocks/settings"
+    },
+    {
+      "from": "src/app/components/store/payment-screen/payment-screen.component.ts",
+      "import": "../../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/store/payment-screen/payment-screen.component.ts",
+      "import": "../../../providers/printer.service"
+    },
+    {
+      "from": "src/app/components/store/payment-screen/payment-screen.component.ts",
+      "import": "../../../services/log.service"
+    },
+    {
+      "from": "src/app/components/store/payment-screen/payment-screen.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/store/payment-screen/payment-screen.component.ts",
+      "import": "../../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/store/payment-screen/payment-screen.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/store/payment-screen/payment-screen.component.ts",
+      "import": "@angular/router"
+    },
+    {
+      "from": "src/app/components/store/payment-screen/payment-screen.component.ts",
+      "import": "app/mocks/customer"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "../../../mocks/check"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "../../../mocks/order"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "../../../mocks/product"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "../../../mocks/settings"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "../../../mocks/table"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "../../../providers/electron.service"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "../../../providers/message.service"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "../../../providers/printer.service"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "../../../providers/scaler.service"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "../../../services/log.service"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "../../../services/main.service"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "../../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "@angular/forms"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "@angular/router"
+    },
+    {
+      "from": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "import": "rxjs"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "../../mocks/check"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "../../mocks/order"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "../../mocks/product"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "../../mocks/receipt"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "../../mocks/report"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "../../mocks/settings"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "../../mocks/stocks"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "../../mocks/table"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "../../services/log.service"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "../../services/main.service"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "../../services/settings.service"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/components/store/store.component.ts",
+      "import": "@angular/router"
+    },
+    {
+      "from": "src/app/directives/button.directive.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/directives/keyboard.directive.ts",
+      "import": "../providers/keyboard.service"
+    },
+    {
+      "from": "src/app/directives/keyboard.directive.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/guards/auth.guard.service.ts",
+      "import": "../providers/message.service"
+    },
+    {
+      "from": "src/app/guards/auth.guard.service.ts",
+      "import": "../services/auth.service"
+    },
+    {
+      "from": "src/app/guards/auth.guard.service.ts",
+      "import": "../services/settings.service"
+    },
+    {
+      "from": "src/app/guards/auth.guard.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/guards/auth.guard.service.ts",
+      "import": "@angular/router"
+    },
+    {
+      "from": "src/app/mocks/print.ts",
+      "import": "./settings"
+    },
+    {
+      "from": "src/app/mocks/receipt.ts",
+      "import": "./order"
+    },
+    {
+      "from": "src/app/pipes/general.pipe.ts",
+      "import": "../services/main.service"
+    },
+    {
+      "from": "src/app/pipes/general.pipe.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/pipes/price.pipe.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/pipes/timeago.pipe.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/providers/caller-id.service.ts",
+      "import": "../mocks/caller"
+    },
+    {
+      "from": "src/app/providers/caller-id.service.ts",
+      "import": "../services/settings.service"
+    },
+    {
+      "from": "src/app/providers/caller-id.service.ts",
+      "import": "./electron.service"
+    },
+    {
+      "from": "src/app/providers/caller-id.service.ts",
+      "import": "./message.service"
+    },
+    {
+      "from": "src/app/providers/caller-id.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/providers/caller-id.service.ts",
+      "import": "rxjs"
+    },
+    {
+      "from": "src/app/providers/electron.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/providers/electron.service.ts",
+      "import": "child_process"
+    },
+    {
+      "from": "src/app/providers/electron.service.ts",
+      "import": "crypto"
+    },
+    {
+      "from": "src/app/providers/electron.service.ts",
+      "import": "electron"
+    },
+    {
+      "from": "src/app/providers/electron.service.ts",
+      "import": "fs"
+    },
+    {
+      "from": "src/app/providers/electron.service.ts",
+      "import": "https"
+    },
+    {
+      "from": "src/app/providers/electron.service.ts",
+      "import": "os"
+    },
+    {
+      "from": "src/app/providers/keyboard.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/providers/keyboard.service.ts",
+      "import": "rxjs"
+    },
+    {
+      "from": "src/app/providers/keyboard.service.ts",
+      "import": "rxjs/Subject"
+    },
+    {
+      "from": "src/app/providers/message.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/providers/message.service.ts",
+      "import": "rxjs/Observable"
+    },
+    {
+      "from": "src/app/providers/message.service.ts",
+      "import": "rxjs/Subject"
+    },
+    {
+      "from": "src/app/providers/message.service.ts",
+      "import": "sweetalert"
+    },
+    {
+      "from": "src/app/providers/printer.service.ts",
+      "import": "../mocks/order"
+    },
+    {
+      "from": "src/app/providers/printer.service.ts",
+      "import": "../mocks/print"
+    },
+    {
+      "from": "src/app/providers/printer.service.ts",
+      "import": "../services/main.service"
+    },
+    {
+      "from": "src/app/providers/printer.service.ts",
+      "import": "../services/settings.service"
+    },
+    {
+      "from": "src/app/providers/printer.service.ts",
+      "import": "./electron.service"
+    },
+    {
+      "from": "src/app/providers/printer.service.ts",
+      "import": "./message.service"
+    },
+    {
+      "from": "src/app/providers/printer.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/providers/printer.service.ts",
+      "import": "escpos"
+    },
+    {
+      "from": "src/app/providers/scaler.service.ts",
+      "import": "../services/settings.service"
+    },
+    {
+      "from": "src/app/providers/scaler.service.ts",
+      "import": "./electron.service"
+    },
+    {
+      "from": "src/app/providers/scaler.service.ts",
+      "import": "./message.service"
+    },
+    {
+      "from": "src/app/providers/scaler.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/providers/scaler.service.ts",
+      "import": "rxjs"
+    },
+    {
+      "from": "src/app/providers/scaler.service.ts",
+      "import": "rxjs/operators/map"
+    },
+    {
+      "from": "src/app/providers/terminal.service.ts",
+      "import": "./electron.service"
+    },
+    {
+      "from": "src/app/providers/terminal.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/services/application.service.ts",
+      "import": "../providers/message.service"
+    },
+    {
+      "from": "src/app/services/application.service.ts",
+      "import": "./settings.service"
+    },
+    {
+      "from": "src/app/services/application.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/services/application.service.ts",
+      "import": "@angular/router"
+    },
+    {
+      "from": "src/app/services/auth.service.ts",
+      "import": "../providers/message.service"
+    },
+    {
+      "from": "src/app/services/auth.service.ts",
+      "import": "./main.service"
+    },
+    {
+      "from": "src/app/services/auth.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/services/auth.service.ts",
+      "import": "rxjs"
+    },
+    {
+      "from": "src/app/services/auth.service.ts",
+      "import": "rxjs/Subject"
+    },
+    {
+      "from": "src/app/services/conflict.service.ts",
+      "import": "./main.service"
+    },
+    {
+      "from": "src/app/services/conflict.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/services/http.service.ts",
+      "import": "./main.service"
+    },
+    {
+      "from": "src/app/services/http.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/services/http.service.ts",
+      "import": "@angular/http"
+    },
+    {
+      "from": "src/app/services/log.service.ts",
+      "import": "../mocks/log"
+    },
+    {
+      "from": "src/app/services/log.service.ts",
+      "import": "./main.service"
+    },
+    {
+      "from": "src/app/services/log.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/services/main.service.ts",
+      "import": "../mocks/settings"
+    },
+    {
+      "from": "src/app/services/main.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/services/main.service.ts",
+      "import": "pouch-resolve-conflicts"
+    },
+    {
+      "from": "src/app/services/main.service.ts",
+      "import": "pouchdb-adapter-memory"
+    },
+    {
+      "from": "src/app/services/main.service.ts",
+      "import": "pouchdb-browser"
+    },
+    {
+      "from": "src/app/services/main.service.ts",
+      "import": "pouchdb-find"
+    },
+    {
+      "from": "src/app/services/main.service.ts",
+      "import": "pouchdb-replication-stream"
+    },
+    {
+      "from": "src/app/services/main.service.ts",
+      "import": "pouchdb-upsert"
+    },
+    {
+      "from": "src/app/services/order.service.ts",
+      "import": "./main.service"
+    },
+    {
+      "from": "src/app/services/order.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/services/settings.service.ts",
+      "import": "../mocks/settings"
+    },
+    {
+      "from": "src/app/services/settings.service.ts",
+      "import": "./main.service"
+    },
+    {
+      "from": "src/app/services/settings.service.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/app/services/settings.service.ts",
+      "import": "rxjs"
+    },
+    {
+      "from": "src/main.ts",
+      "import": "./app/app.module"
+    },
+    {
+      "from": "src/main.ts",
+      "import": "@angular/core"
+    },
+    {
+      "from": "src/main.ts",
+      "import": "@angular/platform-browser-dynamic"
+    },
+    {
+      "from": "src/main.ts",
+      "import": "environments"
+    },
+    {
+      "from": "src/test.ts",
+      "import": "@angular/core/testing"
+    },
+    {
+      "from": "src/test.ts",
+      "import": "@angular/platform-browser-dynamic/testing"
+    }
+  ]
+}

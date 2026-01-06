@@ -1,0 +1,105 @@
+{
+  "generatedAt": "2026-01-05T23:55:38.808Z",
+  "scannedRoots": [
+    "src",
+    "main"
+  ],
+  "tsFileCount": 82,
+  "items": [
+    {
+      "file": "src/app/guards/auth.guard.service.ts",
+      "className": "AnonymousCanActivate",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/guards/auth.guard.service.ts",
+      "className": "CanActivateViaAuthGuard",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/guards/auth.guard.service.ts",
+      "className": "DayStarted",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/guards/auth.guard.service.ts",
+      "className": "SetupFinished",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/providers/caller-id.service.ts",
+      "className": "CallerIDService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/providers/electron.service.ts",
+      "className": "ElectronService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/providers/keyboard.service.ts",
+      "className": "KeyboardService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/providers/message.service.ts",
+      "className": "MessageService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/providers/printer.service.ts",
+      "className": "PrinterService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/providers/scaler.service.ts",
+      "className": "ScalerService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/providers/terminal.service.ts",
+      "className": "TerminalService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/services/application.service.ts",
+      "className": "ApplicationService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/services/auth.service.ts",
+      "className": "AuthService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/services/conflict.service.ts",
+      "className": "ConflictService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/services/http.service.ts",
+      "className": "HttpService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/services/log.service.ts",
+      "className": "LogService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/services/main.service.ts",
+      "className": "MainService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/services/order.service.ts",
+      "className": "OrderService",
+      "kind": "Injectable"
+    },
+    {
+      "file": "src/app/services/settings.service.ts",
+      "className": "SettingsService",
+      "kind": "Injectable"
+    }
+  ]
+}

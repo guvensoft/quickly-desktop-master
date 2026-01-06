@@ -1,0 +1,175 @@
+{
+  "generatedAt": "2026-01-05T23:55:38.808Z",
+  "scannedRoots": [
+    "src",
+    "main"
+  ],
+  "tsFileCount": 82,
+  "items": [
+    {
+      "file": "src/app/app.component.ts",
+      "className": "AppComponent",
+      "selector": "app-root"
+    },
+    {
+      "file": "src/app/components/activation/activation.component.ts",
+      "className": "ActivationComponent",
+      "selector": "app-activation"
+    },
+    {
+      "file": "src/app/components/admin/admin.component.ts",
+      "className": "AdminComponent",
+      "selector": "app-admin"
+    },
+    {
+      "file": "src/app/components/cashbox/cashbox.component.ts",
+      "className": "CashboxComponent",
+      "selector": "app-cashbox"
+    },
+    {
+      "file": "src/app/components/endoftheday/day-detail/day-detail.component.ts",
+      "className": "DayDetailComponent",
+      "selector": "app-day-detail"
+    },
+    {
+      "file": "src/app/components/endoftheday/endoftheday.component.ts",
+      "className": "EndofthedayComponent",
+      "selector": "app-endoftheday"
+    },
+    {
+      "file": "src/app/components/helpers/caller/caller.component.ts",
+      "className": "CallerComponent",
+      "selector": "app-caller"
+    },
+    {
+      "file": "src/app/components/helpers/keyboard/keyboard.component.ts",
+      "className": "KeyboardComponent",
+      "selector": "app-keyboard"
+    },
+    {
+      "file": "src/app/components/helpers/message/message.component.ts",
+      "className": "MessageComponent",
+      "selector": "app-message"
+    },
+    {
+      "file": "src/app/components/home/home.component.ts",
+      "className": "HomeComponent",
+      "selector": "app-home"
+    },
+    {
+      "file": "src/app/components/login/login.component.ts",
+      "className": "LoginComponent",
+      "selector": "app-login"
+    },
+    {
+      "file": "src/app/components/reports/activity-reports/activity-reports.component.ts",
+      "className": "ActivityReportsComponent",
+      "selector": "app-activity-reports"
+    },
+    {
+      "file": "src/app/components/reports/cashbox-reports/cashbox-reports.component.ts",
+      "className": "CashboxReportsComponent",
+      "selector": "app-cashbox-reports"
+    },
+    {
+      "file": "src/app/components/reports/notifications-reports/notifications-reports.component.ts",
+      "className": "NotificationsReportsComponent",
+      "selector": "app-notifications-reports"
+    },
+    {
+      "file": "src/app/components/reports/product-reports/product-reports.component.ts",
+      "className": "ProductReportsComponent",
+      "selector": "app-product-reports"
+    },
+    {
+      "file": "src/app/components/reports/reports.component.ts",
+      "className": "ReportsComponent",
+      "selector": "app-reports"
+    },
+    {
+      "file": "src/app/components/reports/stock-reports/stock-reports.component.ts",
+      "className": "StockReportsComponent",
+      "selector": "app-stock-reports"
+    },
+    {
+      "file": "src/app/components/reports/store-reports/store-reports.component.ts",
+      "className": "StoreReportsComponent",
+      "selector": "app-store-reports"
+    },
+    {
+      "file": "src/app/components/reports/table-reports/table-reports.component.ts",
+      "className": "TableReportsComponent",
+      "selector": "app-table-reports"
+    },
+    {
+      "file": "src/app/components/reports/user-reports/user-reports.component.ts",
+      "className": "UserReportsComponent",
+      "selector": "app-user-reports"
+    },
+    {
+      "file": "src/app/components/settings/application-settings/application-settings.component.ts",
+      "className": "ApplicationSettingsComponent",
+      "selector": "app-application-settings"
+    },
+    {
+      "file": "src/app/components/settings/customer-settings/customer-settings.component.ts",
+      "className": "CustomerSettingsComponent",
+      "selector": "app-customer-settings"
+    },
+    {
+      "file": "src/app/components/settings/menu-settings/menu-settings.component.ts",
+      "className": "MenuSettingsComponent",
+      "selector": "app-menu-settings"
+    },
+    {
+      "file": "src/app/components/settings/printer-settings/printer-settings.component.ts",
+      "className": "PrinterSettingsComponent",
+      "selector": "app-printer-settings"
+    },
+    {
+      "file": "src/app/components/settings/recipe-settings/recipe-settings.component.ts",
+      "className": "RecipeSettingsComponent",
+      "selector": "app-recipe-settings"
+    },
+    {
+      "file": "src/app/components/settings/restaurant-settings/restaurant-settings.component.ts",
+      "className": "RestaurantSettingsComponent",
+      "selector": "app-restaurant-settings"
+    },
+    {
+      "file": "src/app/components/settings/settings.component.ts",
+      "className": "SettingsComponent",
+      "selector": "app-settings"
+    },
+    {
+      "file": "src/app/components/settings/stock-settings/stock-settings.component.ts",
+      "className": "StockSettingsComponent",
+      "selector": "app-stock-settings"
+    },
+    {
+      "file": "src/app/components/settings/user-settings/user-settings.component.ts",
+      "className": "UserSettingsComponent",
+      "selector": "app-user-settings"
+    },
+    {
+      "file": "src/app/components/setup/setup.component.ts",
+      "className": "SetupComponent",
+      "selector": "app-setup"
+    },
+    {
+      "file": "src/app/components/store/payment-screen/payment-screen.component.ts",
+      "className": "PaymentScreenComponent",
+      "selector": "app-payment-screen"
+    },
+    {
+      "file": "src/app/components/store/selling-screen/selling-screen.component.ts",
+      "className": "SellingScreenComponent",
+      "selector": "app-selling-screen"
+    },
+    {
+      "file": "src/app/components/store/store.component.ts",
+      "className": "StoreComponent",
+      "selector": "app-store"
+    }
+  ]
+}

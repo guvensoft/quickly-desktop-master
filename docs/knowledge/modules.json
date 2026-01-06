@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-01-05T23:55:38.808Z",
+  "scannedRoots": [
+    "src",
+    "main"
+  ],
+  "tsFileCount": 82,
+  "items": [
+    {
+      "file": "src/app/app-routing.module.ts",
+      "className": "AppRoutingModule"
+    },
+    {
+      "file": "src/app/app.module.ts",
+      "className": "AppModule"
+    }
+  ]
+}

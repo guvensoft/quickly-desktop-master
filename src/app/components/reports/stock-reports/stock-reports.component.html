@@ -1,0 +1,143 @@
+<ul class="nav nav-tabs nav-justified" id="reportTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#general" role="tab">
+      <i class="fa fa-bar-chart" aria-hidden="true"></i> Stok Durumu</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#list" role="tab">
+      <i class="fa fa-th" aria-hidden="true"></i> Stok Listesi</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#notifications" role="tab">
+      <i class="fa fa-bell" aria-hidden="true"></i> Bildirimler</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="general" role="tabpanel">
+    <div class="card ntb">
+      <div class="card-header">
+        <h5 class="mt-2">Stok Durumu</h5>
+      </div>
+      <div class="card-body tab-height p-0">
+        <div class="row">
+          <div class="col-lg-3 pr-0">
+            <div class="card tab-inside-height">
+              <div class="card-header">Kategoriler</div>
+              <div class="card-body p-0 flow">
+                <button type="button" (click)="fillData();" [ngClass]="{'list-group-item-warning' : selectedCat == undefined}"
+                  class="list-group-item list-group-item-action list-eq">
+                  Bütün Stoklar
+                </button>
+                <button *ngFor="let cat of allCats" type="button" [ngClass]="{'list-group-item-warning' : selectedCat == cat._id}"
+                  (click)="getStocksByCategory(cat._id)" class="list-group-item list-group-item-action list-eq">
+                  {{cat.name}}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-9 pl-0">
+            <div class="card tab-inside-height">
+              <div class="card-header">Stoklar</div>
+              <div class="card-body p-0 flow">
+                <div class="row">
+                  <div *ngFor="let stock of stocksView" class="col-lg-6 stocksCard">
+                    <div class="bodyquote">
+                      <p class="mb-2">
+                        <strong [ngClass]="{'text-danger': stock.left_total <= 0}">{{stock.name}}</strong>
+                        <!-- <small>({{stock.cat_id | general:'stocks_cat' | async}})</small> -->
+                      </p>
+                      <div class="progress">
+                        <div [ngClass]="{'bg-danger':stock.warning_limit >= stock.left_total}" class="progress-bar bg-warning progress-bar-striped"
+                          role="progressbar" style="height: 20px;" [ngStyle]="{width:stock.left_total/(stock.total*stock.first_quantity) | percent:'1.0-1'}"
+                          [attr.aria-valuenow]="stock.left_total" aria-valuemin="0" [attr.aria-valuemax]="stock.total"></div>
+                      </div>
+                      <small class="mt-2">
+                        <span *ngIf="stock.left_total > 0"> Kalan : {{stock.left_total | number:'1.0-2'}}
+                          {{stock.unit}}</span>
+                        <span *ngIf="stock.left_total <= 0" class="text-danger">Tükendi!</span>
+                        <span class="pull-right text-muted mt-1">Stok Durumu:
+                          {{(stock.left_total/(stock.total*stock.first_quantity))*100 | number: '1.0-2'}}%</span>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <i class="fa fa-question-circle" aria-hidden="true"></i> Yardım
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane" id="list" role="tabpanel">
+    <div class="card ntb">
+      <div class="card-header">
+        <h5 class="mt-2">Stok listesi</h5>
+      </div>
+      <div class="card-body tab-height p-0 flow">
+        <table class="table  table-bordered table-sm table-hover table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th width="6%">
+                <i class="fa fa-truck" aria-hidden="true"></i>
+              </th>
+              <th width="19%">Stok Adı</th>
+              <th colspan="3" width="25%">Son Toplam</th>
+              <th colspan="2" width="15%">Harcanan</th>
+              <th colspan="3" width="30%">Kalan Miktar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let stock of allStocks; let i = index;">
+              <td>{{i+1}}</td>
+              <td>{{stock.name}}</td>
+              <td>{{stock.first_quantity | number: '1.0-2'}}x</td>
+              <td>{{stock.total*stock.first_quantity | number:'1.0-2'}} </td>
+              <td>{{stock.unit}}</td>
+              <td class="table-info">{{stock.total*stock.first_quantity - stock.left_total | number:'1.0-2' }}</td>
+              <td class="table-info">{{stock.unit}}</td>
+              <td>{{stock.quantity | number:'1.0-2' }}x</td>
+              <td>{{stock.left_total | number:'1.0-2' }}</td>
+              <td>{{stock.unit}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer">
+        <i class="fa fa-question-circle" aria-hidden="true"></i> Yardım
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane" id="notifications" role="tabpanel">
+    <div class="card ntb">
+      <div class="card-header">
+        <h5 class="mt-2">Bildirimler</h5>
+      </div>
+      <div class="card-body tab-height p-0 flow">
+        <table class="table table-striped  table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th width="10%">Kullanıcı</th>
+              <th>Açıklama</th>
+              <th width="25%" colspan="2">Tarih</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of stockLogs">
+              <td>{{log.user}}</td>
+              <td>{{log.description}}</td>
+              <td>{{log.timestamp | date:'HH:mm'}}</td>
+              <td>{{log.timestamp | date:'dd/M/y'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer">
+        <i class="fa fa-question-circle" aria-hidden="true"></i> Yardım
+      </div>
+    </div>
+  </div>
+</div>

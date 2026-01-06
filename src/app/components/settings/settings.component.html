@@ -1,0 +1,98 @@
+<div class="row">
+  <div id="settings-holder" class="col-lg-2">
+    <div class="card">
+      <div class="card-body" [ngClass]="{'bg-danger text-white':selected == 1}" (click)="selected = 1">
+        <h2>
+          <i class="fa fa-users"></i>
+          <span>Kullanıcılar</span>
+        </h2>
+      </div>
+    </div>
+    <div class="card" [ngClass]="{'bg-danger text-white':selected == 2}" (click)="selected = 2">
+      <div class="card-body">
+        <h2>
+          <i class="fa fa-glass"></i>
+          <span>Ürünler</span>
+        </h2>
+      </div>
+    </div>
+    <div class="card" [ngClass]="{'bg-danger text-white':selected == 3}" (click)="selected = 3">
+      <div class="card-body">
+        <h2>
+          <i class="fa fa-square"></i>
+          <span>Masalar</span>
+        </h2>
+      </div>
+    </div>
+    <div class="card" [ngClass]="{'bg-danger text-white':selected == 4}" (click)="selected = 4">
+      <div class="card-body">
+        <h2>
+          <i class="fa fa-truck"></i>
+          <span>Stoklar</span>
+        </h2>
+      </div>
+    </div>
+    <div class="card" [ngClass]="{'bg-danger text-white':selected == 5}" (click)="selected = 5">
+      <div class="card-body">
+        <h2>
+          <i class="fa fa-file"></i>
+          <span>Reçeteler</span>
+        </h2>
+      </div>
+    </div>
+    <div class="card" [ngClass]="{'bg-danger text-white':selected == 6}" (click)="selected = 6">
+      <div class="card-body">
+        <h2>
+          <i class="fa fa-address-card"></i>
+          <span>Müşteriler</span>
+        </h2>
+      </div>
+    </div>
+    <div class="card" [ngClass]="{'bg-danger text-white':selected == 7}" (click)="selected = 7">
+      <div class="card-body">
+        <h2>
+          <i class="fa fa-print"></i>
+          <span>Yazıcılar</span>
+        </h2>
+      </div>
+    </div>
+    <div class="card" [ngClass]="{'bg-danger text-white':selected == 8}" (click)="selected = 8">
+      <div class="card-body">
+        <h2>
+          <i class="fa fa-server"></i>
+          <span>Sunucular</span>
+        </h2>
+      </div>
+    </div>
+    <div class="card" [ngClass]="{'bg-danger text-white':selected == 9}" (click)="selected = 9">
+      <div class="card-body">
+        <h2>
+          <i class="fa fa-cogs"></i>
+          <span>Ayarlar</span>
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-10 pl-0">
+    <div class="card full-height">
+      <div class="card-body">
+        <div *ngIf="selected == undefined" class="container text-center">
+          <div class="jumbotron m-0 p-0">
+            <img src="../../../assets/logo.svg" height="200px" style="margin-top:15px; margin-bottom:15px;" alt="">
+            <p><strong>Quickly Yazılım Kurumsal Hizmetler Sanayii ve Dış Tic. Ltd. Şti.</strong></p>
+            <hr class="my-4">
+          </div>
+          <img src="{{logo}}" class="logo" alt="">
+          <p>{{storeInfo?.name}}</p>
+        </div>
+        <app-user-settings *ngIf="selected == 1"></app-user-settings>
+        <app-menu-settings *ngIf="selected == 2"></app-menu-settings>
+        <app-restaurant-settings *ngIf="selected == 3"></app-restaurant-settings>
+        <app-stock-settings *ngIf="selected == 4"></app-stock-settings>
+        <app-recipe-settings *ngIf="selected == 5"></app-recipe-settings>
+        <app-customer-settings *ngIf="selected == 6"></app-customer-settings>
+        <app-application-settings *ngIf="selected == 9"></app-application-settings>
+      </div>
+    </div>
+  </div>
+</div>

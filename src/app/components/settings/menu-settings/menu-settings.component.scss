@@ -1,0 +1,21 @@
+#productHolder{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-top:5px;
+}
+.inside-height{
+    height: 74.5vh;
+}
+.subCatInput{
+    text-align: center;
+    height: 64px;
+}
+.subCat{
+    padding:1.25em;
+    margin-top: 0.40rem;
+    cursor:pointer; 
+    width:23.8%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

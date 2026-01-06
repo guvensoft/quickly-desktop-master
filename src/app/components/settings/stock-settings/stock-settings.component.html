@@ -1,0 +1,398 @@
+<ul class="nav nav-tabs nav-justified" id="reportTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#menu" role="tab">
+      <i class="fa fa-book" aria-hidden="true"></i> Kategoriler</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#products" role="tab">
+      <i class="fa fa-archive" aria-hidden="true"></i> Stoklar</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" data-toggle="tab" href="#occations" role="tab">
+      <i class="fa fa-truck" aria-hidden="true"></i> Tedarik</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" data-toggle="tab" href="#occations" role="tab">
+      <i class="fa fa-industry" aria-hidden="true"></i> Depo</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="menu" role="tabpanel">
+    <div class="card ntb">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-lg-8">
+            <h5 class="mt-2">Stok Kategori Ayarları</h5>
+          </div>
+          <div class="col-lg-4 pr-2 pl-0">
+            <button class="btn btn-danger btn-md btn-block" data-toggle="modal" data-target="#stockCat" (click)="setDefault()">
+              <i class="fa fa-plus"></i> Kategori Ekle
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body tab-height p-0">
+        <div class="row">
+          <div class="col-lg-3 pr-0">
+            <div class="card tab-inside-height">
+              <div class="card-header">
+                Kategoriler
+              </div>
+              <div class="card-body p-0 flow">
+                <div class="list-group">
+                  <div *ngFor="let cat of categories" class="btn-group btn-group-justify">
+                    <button (click)="getStockCatDetail(cat)" [ngClass]="{'list-group-item-warning' : selectedCat == cat}"
+                      type="button" class="list-group-item list-group-item-action">{{cat.name}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-9 pl-0">
+            <form #stockCatDetailForm="ngForm" (ngSubmit)="updateCategory(stockCatDetailForm)">
+              <div class="card tab-inside-height">
+                <div class="card-header">
+                  Ayrıntılar
+                </div>
+                <div class="card-body p-2 flow">
+                  <h1 *ngIf="selectedCat == undefined" class="text-center mt-5">Listeden Kategori Seçiniz</h1>
+                  <section [hidden]="selectedCat == undefined">
+                    <input type="hidden" name="_id" ngModel>
+                    <input type="hidden" name="_rev" ngModel>
+                    <div class="form-group mb-2">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">
+                            Kategori Adı
+                          </div>
+                        </div>
+                        <input type="text" name="name" class="form-control form-control-lg" ngModel>
+                      </div>
+                    </div>
+                    <div class="form-group mb-2">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">
+                            Açıklama
+                          </div>
+                        </div>
+                        <input type="text" name="description" class="form-control form-control-lg" ngModel>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+                <div class="card-footer" [hidden]="selectedCat == undefined">
+                  <div class="row">
+                    <div class="col-lg-6 pr-1">
+                      <button type="button" (click)="removeCategory(selectedCat._id)" class="btn btn-danger btn-md btn-block">
+                        <i class="fa fa-times" aria-hidden="true"></i> Kategoriyi Sil</button>
+                    </div>
+                    <div class="col-lg-6 pl-1">
+                      <button type="submit" class="btn btn-success btn-md btn-block">
+                        <i class="fa fa-check" aria-hidden="true"></i> Değişiklikleri Kaydet</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <i class="fa fa-question-circle" aria-hidden="true"></i> Yardım
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane" id="products" role="tabpanel">
+    <div class="card ntb">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-lg-8">
+            <h5 class="mt-2">Stoklar</h5>
+          </div>
+          <div class="col-lg-4 pr-2 pl-0">
+            <button [disabled]="categories == undefined || categories.length == 0" class="btn btn-danger btn-md btn-block"
+              (click)="setDefault()" data-toggle="modal" data-target="#stock">
+              <i class="fa fa-plus"></i> Stok Ekle
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body tab-height p-0">
+        <div class="row">
+          <div class="col-xl-3 col-lg-3 pr-0">
+            <div class="card tab-inside-height">
+              <div class="card-header">
+                Kategoriler
+              </div>
+              <div class="card-body p-0 flow">
+                <div class="list-group">
+                  <button (click)="fillData()" type="button" class="list-group-item list-group-item-action">Bütün
+                    Stoklar</button>
+                  <button *ngFor="let cat of categories" (click)="getStocks(cat._id)" type="button" class="list-group-item list-group-item-action">{{cat.name}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-9 col-lg-9 pl-0">
+            <div class="card tab-inside-height">
+              <div class="card-header pt-2 pb-2">
+                <div class="row">
+                  <div class="col-lg-6 pt-1 pr-0">
+                    Stoklar
+                  </div>
+                  <div class="col-lg-6 pl-0 pr-2">
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend normal">
+                        <div class="input-group-text">
+                          <i class="fa fa-search" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                      <input #stockName type="text" placeholder="Stok Adı Giriniz.." (focus)="fillData()" (click)="stockName.value = '';"
+                        (keydown)="filterStocks(stockName.value)" class="form-control form-contol-sm">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body flow p-0">
+                <section>
+                  <table class="table  table-bordered table-dark table-striped table-hover">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th width="6%">#</th>
+                        <th width="29%">Stok</th>
+                        <th colspan="2" width="30%">Son Giriş</th>
+                        <th colspan="3" width="35%">Kalan Miktar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of stocks; let i=index;" (click)="getStockDetail(item);">
+                        <td>{{i+1}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.first_quantity}}x</td>
+                        <td>{{item.total}} {{item.unit}}</td>
+                        <td>{{item.quantity | number:'1.0-2'}}x</td>
+                        <td>{{item.left_total | number:'1.0-2'}}</td>
+                        <td>{{item.unit}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div *ngIf="stocks == undefined || stocks.length == 0" class="row mt-5">
+                    <div class="col-lg-12 mt-5">
+                      <h2 class="text-center mt-3">Eşleşen Stok Bulunamadı</h2>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <i class="fa fa-question-circle" aria-hidden="true"></i> Yardım
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane" id="occations" role="tabpanel">
+    <div class="card ntb">
+      <div class="card-header">
+        <h5 class="mt-2">Stok Ayarları</h5>
+      </div>
+      <div class="card-body tab-height flow">
+
+      </div>
+      <div class="card-footer">
+        <i class="fa fa-question-circle" aria-hidden="true"></i> Yardım
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="stockCat" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modelTitleId">Kategori</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form #stockCatForm="ngForm" (ngSubmit)="addCategory(stockCatForm)">
+        <div class="modal-body">
+          <div *ngIf="onUpdate">
+            <input name="_id" type="hidden" ngModel />
+            <input name="_rev" type="hidden" ngModel />
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Kategori Adı</div>
+            </div>
+            <input type="text" name="name" class="form-control form-control-lg" ngModel>
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Açıklama</div>
+            </div>
+            <input type="text" name="description" class="form-control form-control-lg" ngModel>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Kapat</button>
+          <button type="submit" class="btn btn-primary btn-lg">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="stock" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modelTitleId">Stok</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form #stockForm="ngForm" (ngSubmit)="addStock(stockForm)">
+        <div class="modal-body">
+          <div *ngIf="onUpdate">
+            <input name="_id" type="hidden" ngModel />
+            <input name="_rev" type="hidden" ngModel />
+            <input name="first_quantity" type="hidden" ngModel />
+            <input name="warning_limit" type="hidden" ngModel />
+            <input type="hidden" name="quantity" class="form-control form-control-lg" ngModel>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div *ngIf="onUpdate && selectedStock" class="bodyquote mb-0 pr-1 pl-1">
+                <p class="mb-2">
+                  <strong [ngClass]="{'text-danger': selectedStock.left_total <= 0}">{{selectedStock.name}}</strong>
+                  <small>({{selectedStock.category | general:'stocks_cat' | async}})</small>
+                </p>
+                <div class="progress">
+                  <div [ngClass]="{'bg-danger':selectedStock.warning_limit >= selectedStock.left_total}" class="progress-bar bg-warning progress-bar-striped"
+                    role="progressbar" style="height: 20px;" [ngStyle]="{width:selectedStock.left_total/(selectedStock.total*selectedStock.first_quantity) | percent:'1.0-1'}"
+                    [attr.aria-valuenow]="selectedStock.left_total" aria-valuemin="0" [attr.aria-valuemax]="selectedStock.total"></div>
+                </div>
+                <small class="mt-2">
+                  <span *ngIf="selectedStock.left_total > 0"> Kalan : {{selectedStock.left_total | number:'1.0-2'}}
+                    {{selectedStock.unit}}</span>
+                  <span *ngIf="selectedStock.left_total <= 0" class="text-danger">Tükendi!</span>
+                  <span class="pull-right text-muted mt-1">Stok Durumu:
+                    {{(selectedStock.left_total/(selectedStock.total*selectedStock.first_quantity))*100 | number:
+                    '1.0-2'}}%
+                  </span>
+                </small>
+              </div>
+              <div *ngIf="onUpdate" class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Kalan</div>
+                </div>
+                <input type="number" readonly name="left_total" class="form-control form-control-lg" ngModel>
+                <input type="hidden" name="timestamp" ngModel>
+                <div class="input-group-append">
+                  <div class="input-group-text">{{unitName.value}}</div>
+                </div>
+              </div>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text"> Stok Adı</div>
+                </div>
+                <input type="text" name="name" class="form-control form-control-lg" ngModel>
+              </div>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Kategori</div>
+                </div>
+                <select name="category" class="form-control form-control-lg" ngModel>
+                  <option *ngFor="let cat of categories" value="{{cat._id}}">{{cat.name}}</option>
+                </select>
+              </div>
+              <div *ngIf="!onUpdate" class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Adet</div>
+                </div>
+                <input type="number" name="quantity" class="form-control form-control-lg" ngModel>
+              </div>
+
+              <!-- <div class="input-group">
+                <div *ngIf="!onUpdate" class="input-group-prepend">
+                  <div class="input-group-text">Adet</div>
+                </div>
+                <input type="number" name="quantity" class="form-control form-control-lg" [readonly]='onUpdate' ngModel>
+              </div> -->
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Miktar</div>
+                </div>
+                <input type="number" name="total" class="form-control form-control-lg" ngModel>
+              </div>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Birim</div>
+                </div>
+                <select #unitName name="unit" class="form-control form-control-lg" ngModel>
+                  <option *ngFor="let unit of units" value="{{unit}}">{{unit}}</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Uyarı Limiti</div>
+                </div>
+                <input type="number" name="warning_value" class="form-control form-control-lg" ngModel>
+                <div class="input-group-append">
+                  <div class="input-group-text">%</div>
+                </div>
+              </div>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Açıklama</div>
+                </div>
+                <textarea name="description" rows="1" class="form-control form-control-lg" ngModel></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Kapat</button>
+          <button *ngIf="onUpdate" type="button" (click)="removeStock(selectedStock._id)" class="btn btn-danger btn-lg">
+            <i class="fa fa-times"></i> Stok Sil</button>
+          <button *ngIf="onUpdate" type="button" data-toggle="modal" data-dismiss="modal" data-target="#quantityModal"
+            class="btn btn-success btn-lg">
+            <i class="fa fa-plus"></i> Adet Ekle</button>
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fa fa-check"></i> Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="selectedStock" class="modal fade" id="quantityModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modelTitleId">{{selectedStock.name}}</h4>
+        <button type="button" class="close" data-dismiss="modal" data-toggle="modal" data-target="#stock" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <input #quantityInput type="number" class="form-control form-control-lg" placeholder="Lütfen Stok Adedi Giriniz">
+          <div class="input-group-append">
+            <div class="input-group-text">Adet</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" data-toggle="modal" data-target="#stock">Kapat</button>
+        <button type="button" (click)="addQuantity(quantityInput.value); quantityInput.value = null;" class="btn btn-primary btn-lg">
+          <i class="fa fa-plus"></i> Ekle</button>
+      </div>
+    </div>
+  </div>
+</div>

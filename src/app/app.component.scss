@@ -1,0 +1,36 @@
+#appHolder {
+    height: 100vh;
+}
+
+nav {
+    height: 56px !important;
+    -webkit-app-region: drag;
+    a,
+    form,
+    ::after,
+    ::before {
+        -webkit-app-region: no-drag;
+        -webkit-user-select: none;
+        -webkit-user-drag: none;
+    }
+}
+
+#mainHolder {
+    position: relative;
+    bottom: 0;
+}
+
+#sidebarHolder {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: grey;
+}
+
+#routerHolder {
+    margin-top: 15px;
+}
