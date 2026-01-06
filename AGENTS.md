@@ -83,6 +83,12 @@ Her iş tesliminde şu sırayı takip et (kısa ve kanıta dayalı):
 - Eğer `npm run index` veya kod yapısı değiştiyse `docs/knowledge/*.json` güncellenmeli; `npm run index` önerilir.
 - Sıkı mod (STRICT MODE) gerektiğinde `REQUIRE_VERIFY=1` ile `npm run verify`, `npm run test:compile`, `npm run build` gibi kontrolleri isteğe bağlı çalıştır.
 - Sembol aramaları için `docs/knowledge/symbols.json`, `symbols.by-source.json` ve `sources.json` içindeki `sourceId`/source tanımlarını kullanarak renderer (`app`) vs main (`electron`) filtrelemesi yapılmalı.
+- `docs/knowledge/symbols.json` büyük; önce `npm run symbols:*` CLI ile sorgulayarak yeterli kanıt topla.
+
+## No Fabrication (low-token)
+
+- Dosya/symbol id’lerini `FAST_CONTEXT.md`, `docs/repo-map.md`, `docs/code/symbol-index.md` veya `npm run symbols:*` komutlarıyla doğrulamadan söyleme.
+- Query sıfır dönerse “kodda aramam gerek” diye not al veya `npm run index` çalıştırıp tekrar dene.
 
 ### Örnek: QUESTION — “PouchDB sync nerede?”
 - Read order: AGENTS → repo-map → symbol-index → docs/knowledge/symbols.json → `src/app/services`.

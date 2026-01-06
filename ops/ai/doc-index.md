@@ -42,6 +42,7 @@ Bu indeks, repo dokümantasyonunun SSOT giriş noktalarını listeler.
 - Source-aware symbols summary: `docs/knowledge/symbols.by-source.json`
 - Source hints (tsconfig): `docs/knowledge/sources.json`
 - Method/service metadata (generated): `docs/knowledge/symbols.json`
+- CLI search (preferred over opening symbols.json): `tools/agent/query-symbols.js` (`npm run symbols:name -- ...`)
 
 ## Decisions (ADR)
 
