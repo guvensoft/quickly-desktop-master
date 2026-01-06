@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$repo_root"
+
+if [[ ! -f package.json ]]; then
+  echo "WARN: package.json bulunamadı; pre-push verify atlandı." >&2
+  exit 0
+fi
+
+has_script() {
+  local script_name="$1"
+  node -e "const p=require('./package.json');process.exit(p.scripts && p.scripts['$script_name']?0:1)"
+}
+
+run_script_if_present() {
+  local script_name="$1"
+  if has_script "$script_name"; then
+    echo "Running: npm run $script_name" >&2
+    npm run "$script_name"
+  fi
+}
+
+if has_script "verify"; then
+  echo "Running: npm run verify" >&2
+  npm run verify
+  exit 0
+fi
+
+run_script_if_present "lint"
+run_script_if_present "test"
+run_script_if_present "typecheck"
+run_script_if_present "build"
+
+exit 0
+

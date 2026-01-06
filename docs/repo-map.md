@@ -4,6 +4,12 @@
 
 Bu doküman repo’nun **SSOT** haritasıdır: klasörlerin amacı, kritik entrypoint’ler ve Electron + Angular runtime akışı.
 
+## Generated Map
+
+Bu repo’da ayrıca indexer tarafından üretilen otomatik harita vardır:
+
+- `docs/repo-map.generated.md` (üretmek için: `npm run index`)
+
 ## Dizin Haritası
 
 - `main.ts`: Electron main process entrypoint (window lifecycle + IPC/servers bootstrap).
@@ -56,4 +62,3 @@ Bu doküman repo’nun **SSOT** haritasıdır: klasörlerin amacı, kritik entry
 - Device integration (Electron):
   - `src/app/providers/electron.service.ts` (renderer tarafı Electron bridge)
   - `main/ipcPrinter.ts` (printer IPC)
-

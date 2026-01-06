@@ -12,7 +12,7 @@
 
 > Max 12 dosya / 400 net satır değişiklik.
 
-## Evidence Before Change
+## Evidence:
 
 - Dosya yolu + kısa alıntı/özet
 
@@ -33,4 +33,3 @@
 - Acceptance criteria ✅
 - Verify ✅
 - Changed files listed ✅
-

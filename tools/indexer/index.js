@@ -14,6 +14,7 @@ const outFiles = {
   modules: path.join(outDir, 'modules.json'),
   importsGraph: path.join(outDir, 'imports-graph.json'),
 };
+const repoMapGeneratedPath = path.join(repoRoot, 'docs', 'repo-map.generated.md');
 
 const IGNORE_DIRS = new Set([
   'node_modules',
@@ -67,6 +68,19 @@ function uniqueSorted(items, keyFn) {
   const map = new Map();
   for (const item of items) map.set(keyFn(item), item);
   return Array.from(map.values()).sort((a, b) => keyFn(a).localeCompare(keyFn(b)));
+}
+
+function maxMtimeMs(files) {
+  let max = 0;
+  for (const filePath of files) {
+    try {
+      const { mtimeMs } = fs.statSync(filePath);
+      if (mtimeMs > max) max = mtimeMs;
+    } catch {
+      // ignore
+    }
+  }
+  return max;
 }
 
 function extractImports(tsText) {
@@ -131,7 +145,87 @@ function extractSelectorFromComponentBlock(blockText) {
   return m ? m[1] : null;
 }
 
+function existsRel(relPath) {
+  return fs.existsSync(path.join(repoRoot, relPath));
+}
+
+function listTopLevelDirs() {
+  let entries;
+  try {
+    entries = fs.readdirSync(repoRoot, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+
+  return entries
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
+    .filter((name) => !IGNORE_DIRS.has(name))
+    .filter((name) => name !== '.githooks')
+    .filter((name) => !name.startsWith('.'))
+    .sort((a, b) => a.localeCompare(b));
+}
+
+function buildRepoMapMarkdown(knowledge, outputs) {
+  const lines = [];
+  lines.push('# Repo Map (Generated)');
+  lines.push('');
+  lines.push('Bu dosya `node tools/indexer/index.js` tarafından üretilir. Elle düzenlemeyin.');
+  lines.push('');
+  lines.push('## Meta');
+  lines.push('');
+  lines.push(`- Generated at (deterministic): \`${knowledge.generatedAt}\``);
+  lines.push(`- Scanned roots: ${knowledge.scannedRoots.map((r) => `\`${r}\``).join(', ')}`);
+  lines.push(`- TS file count: \`${knowledge.tsFileCount}\``);
+  lines.push('');
+  lines.push('## Top-Level Dirs');
+  lines.push('');
+  for (const dirName of listTopLevelDirs()) lines.push(`- \`${dirName}/\``);
+  lines.push('');
+  lines.push('## Entrypoints (Detected)');
+  lines.push('');
+  const candidateEntrypoints = [
+    'main.ts',
+    'main.js',
+    'src/main.ts',
+    'src/app/app.module.ts',
+    'src/app/app-routing.module.ts',
+    'webpack.config.js',
+    'electron-builder.json',
+  ].filter(existsRel);
+  for (const p of candidateEntrypoints) lines.push(`- \`${p}\``);
+  lines.push('');
+  lines.push('## Knowledge Index');
+  lines.push('');
+  lines.push(`- \`docs/knowledge/components.json\` (items: ${outputs.components.items.length})`);
+  lines.push(`- \`docs/knowledge/services.json\` (items: ${outputs.services.items.length})`);
+  lines.push(`- \`docs/knowledge/modules.json\` (items: ${outputs.modules.items.length})`);
+  lines.push(`- \`docs/knowledge/imports-graph.json\` (edges: ${outputs.importsGraph.edges.length})`);
+  lines.push('');
+
+  // Lightweight imports graph summary: top importers
+  const byFrom = new Map();
+  for (const edge of outputs.importsGraph.edges) {
+    byFrom.set(edge.from, (byFrom.get(edge.from) || 0) + 1);
+  }
+  const topImporters = Array.from(byFrom.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10);
+  lines.push('## Imports Graph (Top Importers)');
+  lines.push('');
+  if (topImporters.length === 0) {
+    lines.push('- (no edges)');
+  } else {
+    for (const [from, count] of topImporters) lines.push(`- \`${from}\` → \`${count}\` imports`);
+  }
+  lines.push('');
+
+  return lines.join('\n');
+}
+
 function main() {
+  const isCheck = process.argv.includes('--check');
+
   const tsFiles = [];
   for (const root of srcRoots) walk(root, tsFiles);
 
@@ -184,8 +278,9 @@ function main() {
     }
   }
 
+  const generatedAtMs = maxMtimeMs(tsFiles);
   const knowledge = {
-    generatedAt: new Date().toISOString(),
+    generatedAt: new Date(generatedAtMs || 0).toISOString(),
     scannedRoots: srcRoots.map(normalizeRel),
     tsFileCount: tsFiles.length,
   };
@@ -221,16 +316,46 @@ function main() {
     edges: uniqueSorted(importEdges, (e) => `${e.from}=>${e.import}`),
   };
 
-  fs.writeFileSync(outFiles.components, JSON.stringify(componentsOut, null, 2) + '\n');
-  fs.writeFileSync(outFiles.services, JSON.stringify(servicesOut, null, 2) + '\n');
-  fs.writeFileSync(outFiles.modules, JSON.stringify(modulesOut, null, 2) + '\n');
-  fs.writeFileSync(outFiles.importsGraph, JSON.stringify(importsGraphOut, null, 2) + '\n');
+  const outputs = {
+    components: componentsOut,
+    services: servicesOut,
+    modules: modulesOut,
+    importsGraph: importsGraphOut,
+  };
+
+  const jsonByPath = new Map([
+    [outFiles.components, JSON.stringify(componentsOut, null, 2) + '\n'],
+    [outFiles.services, JSON.stringify(servicesOut, null, 2) + '\n'],
+    [outFiles.modules, JSON.stringify(modulesOut, null, 2) + '\n'],
+    [outFiles.importsGraph, JSON.stringify(importsGraphOut, null, 2) + '\n'],
+  ]);
+
+  if (isCheck) {
+    const mismatches = [];
+    for (const [filePath, expected] of jsonByPath.entries()) {
+      const current = readFileSafe(filePath);
+      if (current !== expected) mismatches.push(path.relative(repoRoot, filePath));
+    }
+    if (mismatches.length > 0) {
+      console.error('Indexer check failed. Out-of-date files:');
+      for (const p of mismatches) console.error(`- ${p}`);
+      process.exit(1);
+    }
+    process.exit(0);
+  }
+
+  ensureDir(outDir);
+  for (const [filePath, content] of jsonByPath.entries()) fs.writeFileSync(filePath, content);
+
+  ensureDir(path.dirname(repoMapGeneratedPath));
+  fs.writeFileSync(repoMapGeneratedPath, buildRepoMapMarkdown(knowledge, outputs) + '\n');
 
   console.log('Indexer complete.');
   console.log(`- ${path.relative(repoRoot, outFiles.components)}`);
   console.log(`- ${path.relative(repoRoot, outFiles.services)}`);
   console.log(`- ${path.relative(repoRoot, outFiles.modules)}`);
   console.log(`- ${path.relative(repoRoot, outFiles.importsGraph)}`);
+  console.log(`- ${path.relative(repoRoot, repoMapGeneratedPath)}`);
 }
 
 main();
