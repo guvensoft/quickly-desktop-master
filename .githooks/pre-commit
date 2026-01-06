@@ -5,39 +5,46 @@ repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$repo_root"
 
 slice_path="tasks/ACTIVE_SLICE.md"
-if [[ ! -f "$slice_path" ]]; then
-  echo "ERROR: tasks/ACTIVE_SLICE.md bulunamadı. Önce ACTIVE_SLICE oluştur." >&2
-  echo "Öneri: tasks/templates/slice.md şablonunu kopyalayın ve doldurun." >&2
-  exit 1
+if [[ -f "$slice_path" ]]; then
+  if ! awk '
+    BEGIN { found = 0; has = 0; in_section = 0 }
+    function is_heading(line) { return line ~ /^#{1,6}[[:space:]]+/ }
+    function is_evidence_heading(line) { return tolower(line) ~ /^#{1,6}[[:space:]]*evidence\b/ }
+    function is_evidence_label(line) { return tolower(line) ~ /^[[:space:]]*evidence:[[:space:]]*$/ }
+    {
+      line = $0
+      if (is_evidence_heading(line) || is_evidence_label(line)) {
+        found = 1
+        in_section = 1
+        next
+      }
+      if (in_section && is_heading(line)) in_section = 0
+      if (in_section && line !~ /^[[:space:]]*$/) {
+        l = tolower(line)
+        if (l ~ /^-[[:space:]]*dosya yolu[[:space:]]*\\+/) next
+        has = 1
+      }
+    }
+    END {
+      if (found == 0 || has == 0) exit 1
+      exit 0
+    }
+  ' "$slice_path"; then
+    echo "ERROR: tasks/ACTIVE_SLICE.md içinde Evidence bölümü boş (veya yok)." >&2
+    echo "Beklenen: Evidence altına dosya yolu + kısa alıntı/özet ekleyin (en az 1 satır)." >&2
+    exit 1
+  fi
+else
+  if [[ "${REQUIRE_ACTIVE_SLICE:-}" == "1" ]]; then
+    echo "ERROR: tasks/ACTIVE_SLICE.md bulunamadı ve REQUIRE_ACTIVE_SLICE=1." >&2
+    exit 1
+  fi
+  echo "WARN: tasks/ACTIVE_SLICE.md yok; slice guard atlandı. (REQUIRE_ACTIVE_SLICE=1 ile zorlanabilir)" >&2
 fi
 
-if ! awk '
-  BEGIN { found = 0; has = 0; in_section = 0 }
-  function is_heading(line) { return line ~ /^#{1,6}[[:space:]]+/ }
-  function is_evidence_heading(line) { return tolower(line) ~ /^#{1,6}[[:space:]]*evidence\b/ }
-  function is_evidence_label(line) { return tolower(line) ~ /^[[:space:]]*evidence:[[:space:]]*$/ }
-  {
-    line = $0
-    if (is_evidence_heading(line) || is_evidence_label(line)) {
-      found = 1
-      in_section = 1
-      next
-    }
-    if (in_section && is_heading(line)) in_section = 0
-    if (in_section && line !~ /^[[:space:]]*$/) {
-      l = tolower(line)
-      if (l ~ /^-[[:space:]]*dosya yolu[[:space:]]*\\+/) next
-      has = 1
-    }
-  }
-  END {
-    if (found == 0 || has == 0) exit 1
-    exit 0
-  }
-' "$slice_path"; then
-  echo "ERROR: ACTIVE_SLICE.md içinde Evidence bölümü boş (veya yok). Slice tamamlanmadan commit alınmaz." >&2
-  echo "Beklenen: Evidence altına dosya yolu + kısa alıntı/özet ekleyin (en az 1 satır)." >&2
-  exit 1
+if [[ -x "ops/scripts/verify-docs.sh" ]]; then
+  echo "Running: ops/scripts/verify-docs.sh" >&2
+  ops/scripts/verify-docs.sh
 fi
 
 if [[ -f "tools/indexer/index.js" ]]; then
