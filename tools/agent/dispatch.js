@@ -20,19 +20,19 @@ function resolveRepoRoot() {
 }
 
 const repoRoot = resolveRepoRoot();
-const pkg = require(path.join(repoRoot, 'package.json'));
 const runSlicePath = path.join(repoRoot, 'tools', 'agent', 'run-slice.js');
+const pkg = require(path.join(repoRoot, 'package.json'));
 
 function die(message) {
   console.error(message);
   process.exit(1);
 }
 
-function runCommand(command, args = []) {
+function runCommand(command, args = [], opts = {}) {
   const result = spawnSync(command, args, {
     cwd: repoRoot,
     encoding: 'utf8',
-    stdio: 'inherit',
+    stdio: opts.stdio || 'inherit',
   });
   const code = typeof result.status === 'number' ? result.status : 1;
   return { command: [command, ...args].join(' ').trim(), code };
@@ -41,6 +41,7 @@ function runCommand(command, args = []) {
 function parseArgs(argv) {
   const args = argv.slice(2);
   let type = null;
+  let verifyFlag = false;
   const textParts = [];
 
   for (let i = 0; i < args.length; i++) {
@@ -49,12 +50,15 @@ function parseArgs(argv) {
       i += 1;
       continue;
     }
-
+    if (args[i] === '--verify') {
+      verifyFlag = true;
+      continue;
+    }
     textParts.push(args[i]);
   }
 
   const text = textParts.join(' ').trim();
-  return { type, text };
+  return { type, text, verifyFlag };
 }
 
 function guessType(text) {
@@ -71,10 +75,18 @@ function guessType(text) {
   return 'feature';
 }
 
+function shouldRunVerify(type, wantsVerify) {
+  if (type === 'question') {
+    console.log('NOTE: Question slices skip heavy verification by default.');
+    return false;
+  }
+  return wantsVerify;
+}
+
 function main() {
-  const { type: explicitType, text } = parseArgs(process.argv);
+  const { type: explicitType, text, verifyFlag } = parseArgs(process.argv);
   if (!text) {
-    die('Kullanım: node tools/agent/dispatch.js "<task text>" [--type question|feature|bugfix|upgrade]');
+    die('Kullanım: node tools/agent/dispatch.js "<task text>" [--type question|feature|bugfix|upgrade] [--verify]');
   }
 
   const type = explicitType || guessType(text);
@@ -82,32 +94,32 @@ function main() {
     die('Geçersiz type. question|feature|bugfix|upgrade içinden seçin.');
   }
 
-  console.log(`Dispatch: type=${type}`);
-  runCommand(process.execPath, [runSlicePath, type, text]);
+  console.log(`Dispatching task type=${type}`);
 
-  const queue = [];
-  const enqueue = (script) => {
-    if (pkg.scripts && typeof pkg.scripts[script] === 'string') {
-      queue.push({ script, command: 'npm', args: ['run', script] });
-    } else {
-      console.log(`Skipping ${script}: npm script tanımlı değil.`);
-    }
-  };
-
-  ['index', 'docs:verify', 'test:compile', 'build'].forEach(enqueue);
-
-  const executed = [];
-  for (const item of queue) {
-    const result = runCommand(item.command, item.args);
-    executed.push(result);
-    if (result.code !== 0) {
-      console.log(`Command failed: ${result.command}`);
-      process.exit(result.code);
-    }
+  const runSlice = runCommand(process.execPath, [runSlicePath, type, text]);
+  if (runSlice.code !== 0) {
+    die(`run-slice failed (${runSlice.code}); see output above.`);
   }
 
-  console.log('Dispatch summary:');
-  executed.forEach((result) => console.log(`- ${result.command} (code=${result.code})`));
+  const wantsVerify = verifyFlag || process.env.REQUIRE_VERIFY === '1';
+  const runVerify = shouldRunVerify(type, wantsVerify);
+
+  if (runVerify) {
+    const commands = ['index', 'docs:verify', 'test:compile', 'build'];
+    for (const script of commands) {
+      if (pkg.scripts && typeof pkg.scripts[script] === 'string') {
+        const result = runCommand('npm', ['run', script]);
+        if (result.code !== 0) {
+          die(`npm run ${script} failed (code=${result.code})`);
+        }
+      } else {
+        console.log(`INFO: npm run ${script} scripti tanımlı değil; atlandı.`);
+      }
+    }
+    console.log('Optional verification pipeline completed.');
+  } else {
+    console.log('Slice ready. Optional verifications: npm run index && npm run docs:verify && npm run test:compile && npm run build (use --verify or REQUIRE_VERIFY=1).');
+  }
 }
 
 main();
